@@ -1,3 +1,6 @@
+
+import AboutVue from './views/pages/About.vue';
+
 <template>
   <div>
     <div class="backdrop"></div>
@@ -593,6 +596,11 @@
           </div>
       </div>
     </div>
+
+
+    <router-view></router-view>
+
+
     <section class="news-part" style="background: url(images/newsletter.jpg) no-repeat center">
       <div class="container">
           <div class="row align-items-center">
