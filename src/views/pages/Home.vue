@@ -5,9 +5,30 @@
                 <div class="row">
                     <div class="col-lg-12 order-0 order-lg-1 order-xl-1">
                         <div class="home-grid-slider slider-arrow slider-dots">
-                            <a href="#"><img src="@/assets/images/banner/01.jfif" alt="" /></a><a href="#"><img
+                            <swiper 
+                                :spaceBetween="30"
+                                :pagination="{
+                                clickable: true,
+                                }"
+                                :autoplay="{
+                                    delay: 2500,
+                                    disableOnInteraction: false,
+                                }"
+                                :modules="modules"
+                                class="mySwiper"
+                            >
+
+                                <swiper-slide>
+                                    <a href="#"><img src="@/assets/images/banner/01.jfif" alt="" /></a>
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <a href="#"><img
                                     src="@/assets/images/banner/02.jfif" alt="" /></a>
-                            <a href="#"><img src="@/assets/images/banner/03.jfif" alt="" /></a>
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <a href="#"><img src="@/assets/images/banner/03.jfif" alt="" /></a>
+                                </swiper-slide>
+                            </swiper>
                         </div>
                     </div>
                 </div>
@@ -186,7 +207,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/01.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/01.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -211,7 +233,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/03.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/03.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -235,7 +258,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/02.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/02.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -259,7 +283,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/04.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/04.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -283,7 +308,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/05.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/05.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -307,7 +333,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/11.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/11.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -331,7 +358,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/02.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/02.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -355,7 +383,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/06.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/06.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -379,7 +408,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/08.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/08.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -403,7 +433,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/09.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/09.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -448,7 +479,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/01.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/01.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -473,7 +505,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/03.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/03.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -497,7 +530,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/02.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/02.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -521,7 +555,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/04.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/04.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -545,7 +580,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/05.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/05.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -569,7 +605,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/11.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/11.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -593,7 +630,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/02.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/02.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -617,7 +655,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/06.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/06.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -641,7 +680,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/08.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/08.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -665,7 +705,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/09.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/09.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -710,7 +751,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/01.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/01.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -735,7 +777,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/03.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/03.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -759,7 +802,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/02.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/02.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -783,7 +827,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/04.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/04.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -807,7 +852,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/05.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/05.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -831,7 +877,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/11.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/11.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -855,7 +902,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/02.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/02.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -879,7 +927,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/06.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/06.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -903,7 +952,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/08.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/08.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -927,7 +977,8 @@
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i></button><a class="product-image"
-                                    href="product-video.html"><img src="@/assets/images/product/09.jpg" alt="product" /></a>
+                                    href="product-video.html"><img src="@/assets/images/product/09.jpg"
+                                        alt="product" /></a>
                             </div>
                             <div class="product-content">
                                 <h6 class="product-name">
@@ -1130,3 +1181,15 @@
         </section>
     </div>
 </template>
+
+<script setup>
+    import { ref } from "vue";
+    
+    import { Swiper, SwiperSlide } from "swiper/vue";
+    import "swiper/css";
+    import "swiper/css/pagination";
+    import { Autoplay, Pagination } from "swiper";
+
+    const modules = ref([Autoplay, Pagination]);
+
+</script>
