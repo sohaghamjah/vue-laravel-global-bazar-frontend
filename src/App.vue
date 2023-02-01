@@ -27,12 +27,12 @@
 
 <script setup>
   import {
-    Header,
-    Navbar,
-    CartSidebar,
-    MobileSidebar,
-    NewsLetter,
-    Footer
+      Header,
+      Navbar,
+      CartSidebar,
+      MobileSidebar,
+      NewsLetter,
+      Footer
     } 
   from '@/components';
 </script>

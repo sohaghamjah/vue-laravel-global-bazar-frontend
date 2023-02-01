@@ -1,6 +1,18 @@
+<script setup>
+  function search() {
+    $(".header-form").toggleClass("active"),
+      $(".header-src").children(".fa-search").toggleClass("fa-times");
+  }
+
+  function menu(){
+    $("body").css("overflow", "hidden"),
+     $(".nav-sidebar").addClass("active");
+  }
+</script>
+
 <template>
   <div>
-    <div class="header-top">
+    <div class="header-top">   
       <div class="container">
           <div class="row">
             <div class="col-md-12 col-lg-5">
@@ -23,9 +35,9 @@
       <div class="container">
           <div class="header-content">
             <div class="header-media-group">
-                <button class="header-user">
+                <button class="header-user" @click="menu">
                 <img src="@/assets/images/menu.png" alt="user" /></button><a href="index.html"><img src="@/assets/images/logo.png"
-                  alt="logo" /></a><button class="header-src"><i class="fas fa-search"></i></button>
+                  alt="logo" /></a><button @click="search" class="header-src"><i class="fas fa-search"></i></button>
             </div>
             <a href="index.html" class="header-logo"><img src="@/assets/images/logo.png" alt="logo" /></a>
             <form class="header-form">

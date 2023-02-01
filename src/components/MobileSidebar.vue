@@ -1,3 +1,13 @@
+<script setup>
+    function menuClose(){
+        $(".nav-close").on("click", function () {
+        $("body").css("overflow", "inherit"),
+          $(".nav-sidebar").removeClass("active"),
+          $(".backdrop").fadeOut();
+      });
+    }
+</script>
+
 <template>
     <div>
         <aside class="category-sidebar">
@@ -122,7 +132,7 @@
         </aside>
         <aside class="nav-sidebar">
             <div class="nav-header">
-                <a href="#"><img src="@/assets/images/logo.png" alt="logo" /></a><button class="nav-close"><i
+                <a href="#"><img src="@/assets/images/logo.png" alt="logo" /></a><button class="nav-close" @click="menuClose"><i
                         class="icofont-close"></i></button>
             </div>
             <div class="nav-content">

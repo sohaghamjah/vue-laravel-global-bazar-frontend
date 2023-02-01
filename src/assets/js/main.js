@@ -36,7 +36,7 @@ $(window).on("scroll", function () {
         $("body").css("overflow", "inherit"),
           $(".nav-sidebar").removeClass("active"),
           $(".backdrop").fadeOut();
-      });
+    });
   }),
   $(".header-cart, .cart-btn").on("click", function () {
     $("body").css("overflow", "hidden"),
