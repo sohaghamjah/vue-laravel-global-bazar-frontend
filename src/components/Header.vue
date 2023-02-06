@@ -51,11 +51,16 @@
         <div class="header-content">
           <div class="header-media-group">
             <button class="header-user" @click="menu">
-              <img src="@/assets/images/menu.png" alt="user" /></button><a href="index.html"><img
-                src="@/assets/images/logo.png" alt="logo" /></a><button @click="search" class="header-src"><i
+              <img src="@/assets/images/menu.png" alt="user" /></button>
+              <router-link :to="{name: 'home'}">
+                <img src="@/assets/images/logo.png" alt="logo" />
+              </router-link>
+              <button @click="search" class="header-src"><i
                 class="fas fa-search"></i></button>
           </div>
-          <a href="index.html" class="header-logo"><img src="@/assets/images/logo.png" alt="logo" /></a>
+          <router-link :to="{name: 'home'}" class="header-logo">
+            <img src="@/assets/images/logo.png" alt="logo" />
+          </router-link>
           <form class="header-form">
             <input type="text" placeholder="Search anything..." /><button>
               <i class="fas fa-search"></i>
