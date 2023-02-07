@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import { Login, Register } from '../views/auth';
-import { Home, Shop } from '../views/pages'
+import { Home, Shop, Seller, SellerStore } from '../views/pages'
 
 const routes =[
     {
@@ -15,6 +15,18 @@ const routes =[
         name: 'shop',
         component: Shop,
         meta: {title: 'Shop'}
+    },
+    {
+        path: '/seller', 
+        name: 'seller',
+        component: Seller,
+        meta: {title: 'Seller'}
+    },
+    {
+        path: '/seller-store', 
+        name: 'seller-store',
+        component: SellerStore,
+        meta: {title: 'Seller Store'}
     },
     {
         path: '/user/login', 

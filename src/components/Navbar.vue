@@ -141,7 +141,7 @@
                         <router-link class="navbar-link" :to="{name: 'shop'}">Shop</router-link>
                       </li>
                       <li class="navbar-item dropdown-megamenu">
-                        <a class="navbar-link" href="#">Seller List</a>
+                        <router-link class="navbar-link" :to="{name: 'seller'}">Seller List</router-link>
                       </li>
                   </ul>
                 </div>
