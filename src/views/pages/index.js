@@ -1,4 +1,10 @@
 export {default as Shop} from './Shop.vue';
 export {default as Home} from './Home.vue';
+export {default as ProductDetails} from './ProductDetails.vue';
+export {default as Checkout} from './Checkout.vue';
 export {default as Seller} from './Seller/Seller.vue';
 export {default as SellerStore} from './Seller/SellerStore.vue';
+export {default as SellerApply} from './Seller/SellerApply.vue';
+export {default as MyOrderList} from './users/MyOrderList.vue';
+export {default as MyProfile} from './users/MyProfile.vue';
+export {default as MyWisList} from './users/MyWishlist.vue';

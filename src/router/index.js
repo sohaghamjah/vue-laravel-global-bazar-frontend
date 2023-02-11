@@ -1,7 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import { Login, Register } from '../views/auth';
-import { Home, Shop, Seller, SellerStore } from '../views/pages'
+import { 
+    Home, 
+    Shop, 
+    Seller, 
+    SellerStore,
+    SellerApply,
+    MyOrderList,
+    MyWisList,
+    MyProfile,
+    ProductDetails,
+    Checkout,
+ } from '../views/pages'
 
 const routes =[
     {
@@ -17,6 +28,18 @@ const routes =[
         meta: {title: 'Shop'}
     },
     {
+        path: '/checkout', 
+        name: 'checkout',
+        component: Checkout,
+        meta: {title: 'checkout'}
+    },
+    {
+        path: '/product/details', 
+        name: 'product.details',
+        component: ProductDetails,
+        meta: {title: 'Product Details'}
+    },
+    {
         path: '/seller', 
         name: 'seller',
         component: Seller,
@@ -29,6 +52,12 @@ const routes =[
         meta: {title: 'Seller Store'}
     },
     {
+        path: '/seller-apply', 
+        name: 'seller-apply',
+        component: SellerApply,
+        meta: {title: 'Seller Apply'}
+    },
+    {
         path: '/user/login', 
         name: 'user.login',
         component: Login,
@@ -39,7 +68,25 @@ const routes =[
         name: 'user.register',
         component: Register,
         meta: {title: 'Register'}
-    }
+    },
+    {
+        path: '/my/orders', 
+        name: 'user.orders',
+        component: MyOrderList,
+        meta: {title: 'My Orders'}
+    },
+    {
+        path: '/my/wishlist', 
+        name: 'user.wishlist',
+        component: MyWisList,
+        meta: {title: 'My Wishlist'}
+    },
+    {
+        path: '/my/profile', 
+        name: 'user.profile',
+        component: MyProfile,
+        meta: {title: 'My Profile'}
+    },
 ];
 
 const router = createRouter({

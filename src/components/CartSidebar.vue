@@ -146,8 +146,10 @@
                     <span>apply</span>
                 </button>
             </form>
-            <a class="cart-checkout-btn" href="checkout.html"><span class="checkout-label">Proceed to
-                    Checkout</span><span class="checkout-price">$369.78</span></a>
+            <router-link class="cart-checkout-btn" :to="{name: 'checkout'}">
+                <span class="checkout-label">Proceed to
+                    Checkout</span><span class="checkout-price">$369.78</span>
+            </router-link>
         </div>
     </aside>
 </template>
