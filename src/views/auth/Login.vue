@@ -22,7 +22,8 @@
                       <input class="form-check-input" type="checkbox" id="check" value=""><label class="form-check-label" for="check">Remember Me</label>
                     </div>
                     <div class="form-button">
-                      <button type="submit">login</button>
+                      <button type="submit" style="margin-bottom: 10px">login</button>
+                      <button type="submit" @click.prevent="store.increment">{{ count }}</button>
                       <p>
                         Forgot your password?<a href="reset-password.html" class="">reset here</a>
                       </p>
@@ -43,10 +44,12 @@
   </div>
 </template>
 
-<script>
-export default {
+<script setup>
+  import { useCounter } from '@/stores/counter';
+import { storeToRefs } from 'pinia';
 
-}
+  const store = useCounter()
+  const { count, doubleCount } = storeToRefs(store)
 </script>
 
 <style>
