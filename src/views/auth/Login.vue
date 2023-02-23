@@ -10,20 +10,24 @@
                   <p>Use your credentials to access</p>
                 </div>
                 <div class="user-form-group" id="axiosForm">
-                  <form class="user-form">
+                  <form class="user-form" @submit.prevent="onSubmit">
                     <!--v-if-->
                     <div class="form-group">
-                      <input type="text" class="form-control" placeholder="phone no"><!--v-if-->
+                      <input type="text" class="form-control" placeholder="phone no" v-model="form.phone"><!--v-if-->
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control" placeholder="password"><span class="view-password"><i class="fas text-success fa-eye"></i></span><!--v-if-->
+                      <input :type="passwordShow ? 'password' : 'text'" class="form-control" placeholder="password" v-model="form.password">
+                      <span @click="toggleShow" class="view-password">
+                        <i class="fas text-success" 
+                        :class="passwordShow ? 'fa-eye' : 'fa-eye-slash'"
+                        ></i>
+                      </span><!--v-if-->
                     </div>
                     <div class="form-check mb-3">
                       <input class="form-check-input" type="checkbox" id="check" value=""><label class="form-check-label" for="check">Remember Me</label>
                     </div>
                     <div class="form-button">
                       <button type="submit" style="margin-bottom: 10px">login</button>
-                      <button type="submit" @click.prevent="store.increment">{{ count }}</button>
                       <p>
                         Forgot your password?<a href="reset-password.html" class="">reset here</a>
                       </p>
@@ -45,11 +49,27 @@
 </template>
 
 <script setup>
-  import { useCounter } from '@/stores/counter';
-import { storeToRefs } from 'pinia';
+  import { userAuth } from "@/stores/auth";
+  import { reactive, ref } from "@vue/reactivity";
 
-  const store = useCounter()
-  const { count, doubleCount } = storeToRefs(store)
+  const store = userAuth()
+
+  const form = reactive({
+    phone: "",
+    password: ""
+  })
+
+  const onSubmit = async () => {
+    await store.login(form)
+  }
+
+  // Password toggle show hide
+  const passwordShow = ref(true);
+
+  const toggleShow = () => {
+    passwordShow.value = !passwordShow.value
+  }
+
 </script>
 
 <style>
