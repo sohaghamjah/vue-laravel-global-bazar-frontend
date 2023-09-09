@@ -10,29 +10,33 @@
                   <p>Use your credentials to access</p>
                 </div>
                 <div class="user-form-group" id="axiosForm">
-                  <form class="user-form" @submit.prevent="onSubmit">
-                    <!--v-if-->
+                  <Form class="user-form" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors,isSubmitting }">         
                     <div class="form-group">
-                      <input type="text" class="form-control" placeholder="phone no" v-model="form.phone"><!--v-if-->
+                      <Field name="phone" type="text" class="form-control" placeholder="phone no" :class="{'is-invalid': errors.phone}"/>
+                      <span class="text-danger" v-if="errors.phone">{{ errors.phone }}</span>
                     </div>
                     <div class="form-group">
-                      <input :type="passwordShow ? 'password' : 'text'" class="form-control" placeholder="password" v-model="form.password">
+                      <Field name="password" :type="passwordShow ? 'password' : 'text'" class="form-control" placeholder="password" :class="{'is-invalid': errors.password}"/>
                       <span @click="toggleShow" class="view-password">
                         <i class="fas text-success" 
                         :class="passwordShow ? 'fa-eye' : 'fa-eye-slash'"
                         ></i>
                       </span><!--v-if-->
+                      <span class="text-danger" v-if="errors.password">{{ errors.password }}</span>
                     </div>
                     <div class="form-check mb-3">
                       <input class="form-check-input" type="checkbox" id="check" value=""><label class="form-check-label" for="check">Remember Me</label>
                     </div>
                     <div class="form-button">
-                      <button type="submit" style="margin-bottom: 10px">login</button>
+                      <button type="submit" style="margin-bottom: 10px" :disabled="isSubmitting">
+                        login
+                       <span v-show="isSubmitting" class="spinner-border spinner-border-sm ms-1"></span>
+                      </button>
                       <p>
                         Forgot your password?<a href="reset-password.html" class="">reset here</a>
                       </p>
                     </div>
-                  </form>
+                  </Form>
                 </div>
               </div>
               <div class="user-form-remind">
@@ -50,22 +54,40 @@
 
 <script setup>
   import { userAuth } from "@/stores/auth";
-  import { reactive, ref } from "@vue/reactivity";
+  import { reactive, ref } from "vue";
+  import { useRouter } from 'vue-router'
+  import { Field, Form } from 'vee-validate';
+  import * as yup from 'yup';
+  import { ElNotification } from 'element-plus'
 
-  const store = userAuth()
+  const schema = yup.object({
+    phone: yup.string().required("The phone field is required"),
+    password: yup.string().required("The password field is required"),
+  });
 
-  const form = reactive({
-    phone: "",
-    password: ""
-  })
+  const store = userAuth();
+  const router = useRouter();
 
-  const onSubmit = async () => {
-    await store.login(form)
+
+  const onSubmit = async (values, { setErrors }) => {
+    let response = await store.login(values)
+
+    if(response.data){
+      router.push({ name: 'home'});
+      ElNotification({
+        title: 'Congrats',
+        message: 'Login Successfully',
+        type: 'success',
+        position: 'top-left',
+      })
+    }else{
+      setErrors(response);
+    }
+
   }
 
   // Password toggle show hide
   const passwordShow = ref(true);
-
   const toggleShow = () => {
     passwordShow.value = !passwordShow.value
   }

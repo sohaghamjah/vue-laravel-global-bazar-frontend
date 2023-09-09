@@ -7,3 +7,4 @@
 @import "@/assets/vendor/bootstrap/bootstrap.min.css";
 @import "@/assets/css/main.css";
 @import "@/assets/css/home-category.css";
+@import 'element-plus/dist/index.css'
