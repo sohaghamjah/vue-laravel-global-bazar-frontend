@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { Login, Register } from '../views/auth';
+import { userAuth } from "@/stores";
 import { 
     Home, 
     Shop, 
@@ -60,31 +61,31 @@ const routes =[
         path: '/user/login', 
         name: 'user.login',
         component: Login,
-        meta: {title: 'Login'}
+        meta: {title: 'Login', guest: true}
     },
     {
         path: '/user/register', 
         name: 'user.register',
         component: Register,
-        meta: {title: 'Register'}
+        meta: {title: 'Register', guest: true}
     },
     {
         path: '/my/orders', 
         name: 'user.orders',
         component: MyOrderList,
-        meta: {title: 'My Orders'}
+        meta: {title: 'My Orders', requiresAuth: true}
     },
     {
         path: '/my/wishlist', 
         name: 'user.wishlist',
         component: MyWisList,
-        meta: {title: 'My Wishlist'}
+        meta: {title: 'My Wishlist', requiresAuth: true}
     },
     {
         path: '/my/profile', 
         name: 'user.profile',
         component: MyProfile,
-        meta: {title: 'My Profile'}
+        meta: {title: 'My Profile', requiresAuth: true}
     },
 ];
 
@@ -97,7 +98,23 @@ const DEFAULT_TITLE = '404';
 
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title || DEFAULT_TITLE;
-    next()
+
+    const loggedIn = userAuth();
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+        if (!loggedIn.user.meta) {
+          next({ name: "user.login" });
+        } else {
+          next();
+        }
+    }else if(to.matched.some((record) => record.meta.guest)){
+        if (loggedIn.user.meta) {
+            next({ name: "user.profile" });
+        } else {
+            next();
+        }
+    }else{
+        next();   
+    }
 })
 
 
