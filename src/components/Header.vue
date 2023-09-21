@@ -1,4 +1,27 @@
 <script setup>
+import { userAuth } from "@/stores";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { ElNotification } from 'element-plus'
+
+const router = useRouter();
+const auth = userAuth();
+const { user, loading } = storeToRefs(auth);
+
+const userLogout = async () => {
+  const res = await auth.logout();
+  console.log(res);
+  if(res.status){
+    router.push({ name: 'home'});
+      ElNotification({
+        title: 'Logout',
+        message: 'Logout Successfully',
+        type: 'success',
+        position: 'top-left',
+    })
+  }
+};
+
   function search() {
     $(".header-form").toggleClass("active"),
       $(".header-src").children(".fa-search").toggleClass("fa-times");
@@ -23,6 +46,8 @@
           $(".backdrop").fadeOut();
       });
   }
+
+
 </script>
 
 <template>
@@ -71,13 +96,15 @@
           <div class="header-widget-group hover-nav">
             <li class="nav-item dropdown">
               <a class="nav-link header-widget" href="#" data-bs-toggle="dropdown"><i class="fas fa-user"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end">
+              <ul class="dropdown-menu dropdown-menu-end" v-if="!user.data">
                 <li>
                   <router-link :to="{name: 'user.login'}" class="dropdown-item">Login</router-link>
                 </li>
                 <li>
                   <router-link :to="{name: 'user.register'}" class="dropdown-item">Register</router-link>
                 </li>
+              </ul>
+              <ul class="dropdown-menu dropdown-menu-end" v-else>
                 <li>
                   <router-link :to="{name: 'user.profile'}" class="dropdown-item">My Profile</router-link>
                 </li>
@@ -86,6 +113,11 @@
                 </li>
                 <li>
                   <router-link :to="{name: 'user.wishlist'}" class="dropdown-item">My Wishlist</router-link>
+                </li>
+                <li>
+                  <button :disabled="loading" class="dropdown-item"  @click="userLogout">Logout
+                    <span v-show="loading" class="spinner-border spinner-border-sm ms-1"></span>
+                  </button>
                 </li>
               </ul>
             </li>

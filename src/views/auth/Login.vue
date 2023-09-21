@@ -70,8 +70,7 @@
 
 
   const onSubmit = async (values, { setErrors }) => {
-    let response = await store.login(values)
-
+    const response = await store.login(values)
     if(response.data){
       router.push({ name: 'home'});
       ElNotification({
