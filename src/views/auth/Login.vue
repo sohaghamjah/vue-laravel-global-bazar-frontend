@@ -54,7 +54,7 @@
 
 <script setup>
   import { userAuth } from "@/stores/auth";
-  import { reactive, ref } from "vue";
+  import { ref } from "vue";
   import { useRouter } from 'vue-router'
   import { Field, Form } from 'vee-validate';
   import * as yup from 'yup';
@@ -65,12 +65,12 @@
     password: yup.string().required("The password field is required"),
   });
 
-  const store = userAuth();
+  const auth = userAuth();
   const router = useRouter();
 
 
   const onSubmit = async (values, { setErrors }) => {
-    const response = await store.login(values)
+    const response = await auth.login(values)
     if(response.data){
       router.push({ name: 'home'});
       ElNotification({
