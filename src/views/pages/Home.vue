@@ -1,3 +1,23 @@
+<script setup>
+    import { ref, onMounted } from "vue";
+    import { useSlider } from "@/stores"
+    import { storeToRefs } from "pinia";
+    import { Swiper, SwiperSlide } from "swiper/vue";
+    import "swiper/css";
+    import "swiper/css/pagination";
+    import "swiper/css/navigation";
+    import { Autoplay, Pagination, Navigation } from "swiper";
+    const modules = ref([Autoplay, Pagination]);
+    const newSlide = ref([Autoplay, Navigation]);
+
+    // Slider Get
+    const slider = useSlider();
+    const { sliders } = storeToRefs(slider);
+    onMounted(() => {
+        slider.getSliders();
+    })
+
+</script>
 <template>
     <div>
         <section class="banner-part">
@@ -17,24 +37,22 @@
                                 :modules="modules"
                                 class="mySwiper"
                             >
-
-                                <swiper-slide>
-                                    <a href="#"><img src="@/assets/images/banner/01.jfif" alt="" /></a>
-                                </swiper-slide>
-                                <swiper-slide>
+                            <swiper-slide v-for="(slider, index) in sliders.data" :key="index">
+                                <a href="#"><img :src="slider.image" alt="" /></a>
+                            </swiper-slide>
+                                <!-- <swiper-slide>
                                     <a href="#"><img
                                     src="@/assets/images/banner/02.jfif" alt="" /></a>
                                 </swiper-slide>
                                 <swiper-slide>
                                     <a href="#"><img src="@/assets/images/banner/03.jfif" alt="" /></a>
-                                </swiper-slide>
+                                </swiper-slide> -->
                             </swiper>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
         <section class="section suggest-part">
             <div class="container">
                 <div class="row">
@@ -1206,17 +1224,3 @@
         </section>
     </div>
 </template>
-
-<script setup>
-    import { ref } from "vue";
-    
-    import { Swiper, SwiperSlide } from "swiper/vue";
-    import "swiper/css";
-    import "swiper/css/pagination";
-    import "swiper/css/navigation";
-    import { Autoplay, Pagination, Navigation } from "swiper";
-
-    const modules = ref([Autoplay, Pagination]);
-    const newSlide = ref([Autoplay, Navigation]);
-
-</script>
