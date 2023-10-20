@@ -1,3 +1,38 @@
+<script setup>
+  import { userAuth, useNotification } from "@/stores";
+  import { ref } from "vue";
+  import { useRouter } from 'vue-router'
+  import { Field, Form } from 'vee-validate';
+  import * as yup from 'yup';
+
+  const schema = yup.object({
+    phone: yup.string().required("The phone field is required"),
+    password: yup.string().required("The password field is required"),
+  });
+
+  const auth = userAuth();
+  const router = useRouter();
+  const notify = useNotification();
+
+
+  const onSubmit = async (values, { setErrors }) => {
+    const response = await auth.login(values)
+    if(response.data){
+      router.push({ name: 'home'});
+      notify.notificationElement('success', 'Congrats, Your Are Loged Id!', 'Success');
+    }else{
+      setErrors(response);
+    }
+
+  }
+
+  // Password toggle show hide
+  const passwordShow = ref(true);
+  const toggleShow = () => {
+    passwordShow.value = !passwordShow.value
+  }
+
+</script>
 <template>
   <div>
     <section class="user-form-part">
@@ -51,47 +86,6 @@
       </section>
   </div>
 </template>
-
-<script setup>
-  import { userAuth } from "@/stores/auth";
-  import { ref } from "vue";
-  import { useRouter } from 'vue-router'
-  import { Field, Form } from 'vee-validate';
-  import * as yup from 'yup';
-  import { ElNotification } from 'element-plus'
-
-  const schema = yup.object({
-    phone: yup.string().required("The phone field is required"),
-    password: yup.string().required("The password field is required"),
-  });
-
-  const auth = userAuth();
-  const router = useRouter();
-
-
-  const onSubmit = async (values, { setErrors }) => {
-    const response = await auth.login(values)
-    if(response.data){
-      router.push({ name: 'home'});
-      ElNotification({
-        title: 'Congrats',
-        message: 'Login Successfully',
-        type: 'success',
-        position: 'top-left',
-      })
-    }else{
-      setErrors(response);
-    }
-
-  }
-
-  // Password toggle show hide
-  const passwordShow = ref(true);
-  const toggleShow = () => {
-    passwordShow.value = !passwordShow.value
-  }
-
-</script>
 
 <style>
     @import "@/assets/css/user-auth.css";

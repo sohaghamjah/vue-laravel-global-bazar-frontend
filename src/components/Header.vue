@@ -1,11 +1,11 @@
 <script setup>
-import { userAuth } from "@/stores";
+import { userAuth, useNotification } from "@/stores";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import { ElNotification } from 'element-plus'
 
 const router = useRouter();
 const auth = userAuth();
+const notify = useNotification();
 const { user, loading } = storeToRefs(auth);
 
 const userLogout = async () => {
@@ -13,12 +13,7 @@ const userLogout = async () => {
   console.log(res);
   if(res.status){
     router.push({ name: 'home'});
-      ElNotification({
-        title: 'Logout',
-        message: 'Logout Successfully',
-        type: 'success',
-        position: 'top-left',
-    })
+    notify.notificationElement('success', 'Logout Successfully!', 'Logout');
   }
 };
 
