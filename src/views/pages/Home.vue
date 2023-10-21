@@ -1,6 +1,6 @@
 <script setup>
     import { ref, onMounted } from "vue";
-    import { useSlider } from "@/stores"
+    import { useSlider, useCategory } from "@/stores"
     import { storeToRefs } from "pinia";
     import { Swiper, SwiperSlide } from "swiper/vue";
     import "swiper/css";
@@ -12,9 +12,14 @@
 
     // Slider Get
     const slider = useSlider();
+    const category = useCategory();
     const { sliders } = storeToRefs(slider);
+    const { categories } = storeToRefs(category);
+
+
     onMounted(() => {
         slider.getSliders();
+        category.getCategories();
     })
 
 </script>
@@ -40,13 +45,6 @@
                             <swiper-slide v-for="(slider, index) in sliders.data" :key="index">
                                 <a href="#"><img :src="slider.image" alt="" /></a>
                             </swiper-slide>
-                                <!-- <swiper-slide>
-                                    <a href="#"><img
-                                    src="@/assets/images/banner/02.jfif" alt="" /></a>
-                                </swiper-slide>
-                                <swiper-slide>
-                                    <a href="#"><img src="@/assets/images/banner/03.jfif" alt="" /></a>
-                                </swiper-slide> -->
                             </swiper>
                         </div>
                     </div>
@@ -64,143 +62,16 @@
                 </div>
 
                 <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
-                    <div class="col">
+                    <div class="col" v-for="(category, index) in categories.data" :key="index">
                         <div class="product-card">
                             <ul>
                                 <li>
                                     <a class="suggest-card" href="shop-4column.html">
-                                        <img src="@/assets/images/promo/home/07.jpg" alt="" />
+                                        <img :src="category.image" alt="" />
                                     </a>
                                 </li>
                             </ul>
-
-                            <h6 class="text-center mt-2">category name</h6>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a class="suggest-card" href="shop-4column.html">
-                                        <img src="@/assets/images/promo/home/07.jpg" alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <h6 class="text-center mt-2">category name</h6>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a class="suggest-card" href="shop-4column.html">
-                                        <img src="@/assets/images/promo/home/07.jpg" alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <h6 class="text-center mt-2">category name</h6>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a class="suggest-card" href="shop-4column.html">
-                                        <img src="@/assets/images/promo/home/07.jpg" alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <h6 class="text-center mt-2">category name</h6>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a class="suggest-card" href="shop-4column.html">
-                                        <img src="@/assets/images/promo/home/07.jpg" alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <h6 class="text-center mt-2">category name</h6>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a class="suggest-card" href="shop-4column.html">
-                                        <img src="@/assets/images/promo/home/07.jpg" alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <h6 class="text-center mt-2">category name</h6>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a class="suggest-card" href="shop-4column.html">
-                                        <img src="@/assets/images/promo/home/07.jpg" alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <h6 class="text-center mt-2">category name</h6>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a class="suggest-card" href="shop-4column.html">
-                                        <img src="@/assets/images/promo/home/07.jpg" alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <h6 class="text-center mt-2">category name</h6>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a class="suggest-card" href="shop-4column.html">
-                                        <img src="@/assets/images/promo/home/06.jpg" alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <h6 class="text-center mt-2">category name</h6>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a class="suggest-card" href="shop-4column.html">
-                                        <img src="@/assets/images/promo/home/07.jpg" alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <h6 class="text-center mt-2">category name</h6>
+                            <h6 class="text-center mt-2">{{ category.name }}</h6>
                         </div>
                     </div>
                 </div>
