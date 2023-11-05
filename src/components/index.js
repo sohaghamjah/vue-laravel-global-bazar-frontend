@@ -5,3 +5,5 @@ export { default as LoginModal } from './LoginModal.vue';
 export { default as MobileSidebar } from './MobileSidebar.vue';
 export { default as Navbar } from './Navbar.vue';
 export { default as NewsLetter } from './NewsLetter.vue';
+export { default as productCard } from './product/productCard.vue';
+export { default as ProductPrice } from './product/ProductPrice.vue';
