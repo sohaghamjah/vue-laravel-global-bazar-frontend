@@ -15,8 +15,11 @@
     <MobileSidebar />
 
     <!-- From Router Call -->
-    <router-view></router-view>
-
+    <router-view v-slot="{ Component }">
+        <transition name="fade" mode="fade-out">
+          <component :is="Component" />
+        </transition>
+    </router-view>
 
     <!-- Newsletter -->
 
@@ -37,3 +40,21 @@
     } 
   from '@/components';
 </script>
+
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
