@@ -13,6 +13,10 @@
 
 @import "element-plus/dist/index.css";
 @import "nprogress/nprogress.css";
+@import "skeleton-screen-css";
+@import "swiper/css";
+@import "swiper/css/pagination";
+@import "swiper/css/navigation";
 
 #nprogress .bar {
   background: #ffffff !important;

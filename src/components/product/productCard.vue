@@ -20,7 +20,7 @@
                     <button class="product-wish wish">
                         <i class="fas fa-heart"></i></button>
                         <router-link class="product-image" :to="{name: 'product.details'}">
-                            <img :src="product.thumbnail"
+                            <img :src="$filters.makeImagePath(product.thumbnail)"
                             alt="product" />
                         </router-link>
                 </div>

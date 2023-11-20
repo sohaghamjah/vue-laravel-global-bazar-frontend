@@ -19,6 +19,10 @@ app.mount('#app');
 app.config.globalProperties.$filters = {
     currencySymbol(value){
         return "৳ " + value.toLocaleString()
+    },
+
+    makeImagePath(img){
+        return import.meta.env.VITE_API_URL + "/" + img;
     }
 }
 

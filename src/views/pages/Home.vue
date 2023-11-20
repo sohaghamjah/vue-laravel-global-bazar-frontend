@@ -3,10 +3,13 @@
     import { useSlider, useCategory, useProduct } from "@/stores"
     import { storeToRefs } from "pinia";
     import { productCard, ProductPrice } from '@/components';
+    import { 
+        BannerSliderSkeleton, 
+        CategorySkeleton, 
+        ProductSkeleton ,
+        ProductSliderSkeleton
+    } from "@/components/skeleton";
     import { Swiper, SwiperSlide } from "swiper/vue";
-    import "swiper/css";
-    import "swiper/css/pagination";
-    import "swiper/css/navigation";
     import { Autoplay, Pagination, Navigation } from "swiper";
 import { data } from "dom7";
     const modules = ref([Autoplay, Pagination]);
@@ -40,22 +43,28 @@ import { data } from "dom7";
                 <div class="row">
                     <div class="col-lg-12 order-0 order-lg-1 order-xl-1">
                         <div class="home-grid-slider slider-arrow slider-dots">
-                            <swiper 
-                                :spaceBetween="30"
-                                :pagination="{
-                                clickable: true,
-                                }"
-                                :loop="true"
-                                :autoplay="{
-                                    delay: 2000,
-                                }"
-                                :modules="modules"
-                                class="mySwiper"
-                            >
-                            <swiper-slide v-for="(slider, index) in sliders.data" :key="index">
-                                <a href="#"><img :src="slider.image" alt="" /></a>
-                            </swiper-slide>
-                            </swiper>
+                            <template v-if="sliders.data">
+                                <swiper 
+                                    :spaceBetween="30"
+                                    :pagination="{
+                                    clickable: true,
+                                    }"
+                                    :loop="true"
+                                    :autoplay="{
+                                        delay: 2000,
+                                    }"
+                                    :modules="modules"
+                                    class="mySwiper"
+                                    >
+                                    <swiper-slide v-for="(slider, index) in sliders.data" :key="index">
+                                        <a href="#"><img :src="$filters.makeImagePath(slider.image)" alt="" /></a>
+                                    </swiper-slide>
+                                </swiper>
+                            </template>
+                            <template v-else>
+                                <BannerSliderSkeleton />
+                            </template>
+                           
                         </div>
                     </div>
                 </div>
@@ -72,18 +81,24 @@ import { data } from "dom7";
                 </div>
 
                 <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
-                    <div class="col" v-for="(category, index) in categories.data" :key="index">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a class="suggest-card" href="shop-4column.html">
-                                        <img :src="category.image" alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-                            <h6 class="text-center mt-2">{{ category.name }}</h6>
+                    <template v-if="categories.data">
+                        <div class="col" v-for="(category, index) in categories.data" :key="index">
+                            <div class="product-card">
+                                <ul>
+                                    <li>
+                                        <a class="suggest-card" href="shop-4column.html">
+                                            <img :src="$filters.makeImagePath(category.image)" alt="" />
+                                        </a>
+                                    </li>
+                                </ul>
+                                <h6 class="text-center mt-2">{{ category.name }}</h6>
+                            </div>
                         </div>
-                    </div>
+                    </template>
+
+                    <template v-else>
+                        <CategorySkeleton :dataAmount="10" />
+                    </template>
                 </div>
             </div>
         </section>
@@ -98,7 +113,12 @@ import { data } from "dom7";
                     </div>
                 </div>
 
-                <productCard :products="products" />
+                <template v-if="products.data">
+                    <productCard :products="products" />
+                </template>
+                <template v-else>
+                    <ProductSkeleton :dataAmount="10" />
+                </template>
               
                 <div class="row">
                     <div class="col-lg-12">
@@ -120,7 +140,13 @@ import { data } from "dom7";
                         </div>
                     </div>
                 </div>
-                <productCard :products="popular" />
+                <template v-if="popular.data">
+                    <productCard :products="popular" />
+                </template>
+                <template v-else>
+                    <ProductSkeleton :dataAmount="10" />
+                </template>
+                
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-btn-25">
@@ -141,7 +167,14 @@ import { data } from "dom7";
                         </div>
                     </div>
                 </div>
-               <productCard :products="sold" />
+
+                <template v-if="sold.data">
+                    <productCard :products="sold" />
+                </template>
+                <template v-else>
+                    <ProductSkeleton :dataAmount="10" />
+                </template>
+
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-btn-25">
@@ -162,7 +195,14 @@ import { data } from "dom7";
                         </div>
                     </div>
                 </div>
-               <productCard :products="winter" />
+
+                <template v-if="winter.data">
+                    <productCard :products="winter" />
+                </template>
+                <template v-else>
+                    <ProductSkeleton :dataAmount="10" />
+                </template>
+                
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-btn-25">
@@ -186,45 +226,21 @@ import { data } from "dom7";
                 <div class="row">
                     <div class="col">
                         <ul class="new-slider slider-arrow">
-                            <swiper
-                                :slidesPerView="5"
-                                :spaceBetween="0"
-                                :slidesPerGroup="1"
-                                :loop="true"
-                                :autoplay="{
-                                    delay: 2000
-                                }"
-                                :loopFillGroupWithBlank="true"
-                                :navigation="true"
-                                :modules="newSlide"
-                                class="mySwiper"
-                            >
-                                <swiper-slide>
-                                    <li>
-                                        <div class="product-card">
-                                            <div class="product-media">
-                                                <div class="product-label">
-                                                    <label class="label-text new">New</label>
-                                                </div>
-                                                <button class="product-wish wish">
-                                                    <i class="fas fa-heart"></i></button><a class="product-image"
-                                                    href="product-video.html"><img src="@/assets/images/product/01.jpg"
-                                                        alt="product" /></a>
-                                            </div>
-                                            <div class="product-content">
-                                                <h6 class="product-name">
-                                                    <a href="product-video.html">Products Name</a>
-                                                </h6>
-                                                <h6 class="product-price">
-                                                    <del>$34</del><span>$28<small></small></span>
-                                                </h6>
-                                                <button class="product-add" title="Add to Cart">
-                                                    <i class="fas fa-shopping-basket"></i><span>Add</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </swiper-slide>
+                            <template v-if="newProducts.data">
+                                <swiper
+                                    :slidesPerView="5"
+                                    :spaceBetween="0"
+                                    :slidesPerGroup="1"
+                                    :loop="true"
+                                    :autoplay="{
+                                        delay: 2000
+                                    }"
+                                    :loopFillGroupWithBlank="true"
+                                    :navigation="true"
+                                    :modules="newSlide"
+                                    class="mySwiper"
+                                >
+                                    
                                 <swiper-slide v-for="(product, index) in newProducts.data" :key="index">
                                     <li>
                                         <div class="product-card">
@@ -236,7 +252,7 @@ import { data } from "dom7";
                                                     <button class="product-wish wish">
                                                         <i class="fas fa-heart"></i></button>
                                                         <router-link class="product-image" :to="{name: 'product.details'}">
-                                                            <img :src="product.thumbnail"
+                                                            <img :src="$filters.makeImagePath(product.thumbnail)"
                                                             alt="product" />
                                                         </router-link>
                                                 </div>
@@ -249,10 +265,16 @@ import { data } from "dom7";
                                                         <i class="fas fa-shopping-basket"></i><span>Add</span>
                                                     </button>
                                                 </div>
-                                            </div>
+                                        </div>
                                     </li>
                                 </swiper-slide>
-                            </swiper> 
+                                
+                                </swiper> 
+                            </template>
+
+                            <template v-else>
+                                <ProductSliderSkeleton></ProductSliderSkeleton>
+                            </template>
                         </ul>
                     </div>
                 </div>
