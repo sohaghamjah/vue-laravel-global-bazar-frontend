@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="modal fade" id="product-view">
+        <div class="modal fade" id="login-modal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <button class="modal-close icofont-close" data-bs-dismiss="modal"></button>

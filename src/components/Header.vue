@@ -1,12 +1,14 @@
 <script setup>
-import { userAuth, useNotification } from "@/stores";
+import { userAuth, useNotification, useCart } from "@/stores";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 
+const cart = useCart();
 const router = useRouter();
 const auth = userAuth();
 const notify = useNotification();
 const { user, loading } = storeToRefs(auth);
+const { cartItemsCount, cartTotal } = storeToRefs(cart);
 
 const userLogout = async () => {
   const res = await auth.logout();
@@ -118,7 +120,7 @@ const userLogout = async () => {
             </li>
             <a href="wishlist.html" class="header-widget" title="Wishlist"><i
                 class="fas fa-heart"></i><sup>0</sup></a><button class="header-widget header-cart" @click="cartShow" title="Cartlist">
-              <i class="fas fa-shopping-basket"></i><sup>9+</sup><span>total price<small>$345.00</small></span>
+              <i class="fas fa-shopping-basket"></i><sup>{{ cartItemsCount }}</sup><span>total price<small>{{ $filters.currencySymbol(cartTotal) }}</small></span>
             </button>
           </div>
         </div>

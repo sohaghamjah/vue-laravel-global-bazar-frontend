@@ -1,5 +1,7 @@
 <script setup>
     import { ProductPrice } from "@/components";
+    import { useCart, useNotification } from "@/stores";
+    import { ref } from "vue";
 
     const props = defineProps({
         products:{
@@ -7,6 +9,31 @@
             required: true,
         },
     });
+
+    const cart = useCart();
+    const price = ref();
+    const notify = useNotification();
+
+    function addToCart(product){
+        if(product.price){
+            var discount = (product.discount * product.price) / 100;
+            var product_price = product.price - discount;
+            price.value = product_price.toFixed();
+        }else{
+            var product_price = product.price;
+            price.value = product_price.toFixed();
+        }
+
+        cart.addToCart({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            thumbnail: product.thumbnail,
+        });
+
+        notify.notificationElement('success', `${product.name} Added Successful`, "Success");
+    }
+
 </script>
 <template>
   <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
@@ -29,7 +56,7 @@
                         <a href="product-video.html">{{ product.name }}</a>
                     </h6>
                     <ProductPrice :product="product"/>
-                    <button class="product-add" title="Add to Cart">
+                    <button class="product-add" title="Add to Cart" @click.prevent="addToCart(product)">
                         <i class="fas fa-shopping-basket"></i><span>Add</span>
                     </button>
                 </div>

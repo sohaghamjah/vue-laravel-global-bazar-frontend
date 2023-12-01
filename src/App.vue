@@ -14,6 +14,8 @@
 
     <MobileSidebar />
 
+    <LoginModal />
+
     <!-- From Router Call -->
     <router-view v-slot="{ Component }">
         <transition name="fade" mode="fade-out">
@@ -36,7 +38,8 @@
       CartSidebar,
       MobileSidebar,
       NewsLetter,
-      Footer
+      Footer,
+      LoginModal
     } 
   from '@/components';
 </script>
