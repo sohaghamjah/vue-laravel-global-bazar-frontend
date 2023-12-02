@@ -1,5 +1,5 @@
 <script setup>
-    import { ref } from "vue";
+    import { onMounted, ref } from "vue";
     import { Form, Field } from 'vee-validate';
     import * as yup from "yup";
     import { userAuth, useNotification } from "@/stores";
@@ -35,6 +35,10 @@
             setErrors(res);
         }
     };
+
+    onMounted(() => {
+        $('#login-modal').modal('hide');
+    })
 
 </script>
 <template>
