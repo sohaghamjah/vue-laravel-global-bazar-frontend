@@ -1,3 +1,36 @@
+<script setup>
+  import { userAuth, useNotification } from "@/stores";
+  import { ref } from "vue";
+  import { Field, Form } from 'vee-validate';
+  import * as yup from 'yup';
+
+  const schema = yup.object({
+    phone: yup.string().required("The phone field is required"),
+    password: yup.string().required("The password field is required"),
+  });
+
+  const auth = userAuth();
+  const notify = useNotification();
+
+
+  const onSubmit = async (values, { setErrors, resetForm }) => {
+    const response = await auth.login(values)
+    if(response.data){
+        resetForm();
+        $("#login-modal").modal('hide');
+        notify.notificationElement('success', 'Congrats, Your Are Logged Id!', 'Success');
+    }else{
+      setErrors(response);
+    }
+  }
+
+  // Password toggle show hide
+  const passwordShow = ref(true);
+  const toggleShow = () => {
+    passwordShow.value = !passwordShow.value
+  }
+
+</script>
 <template>
     <div>
         <div class="modal fade" id="login-modal">
@@ -6,98 +39,40 @@
                     <button class="modal-close icofont-close" data-bs-dismiss="modal"></button>
                     <div class="product-view">
                         <div class="row">
-                            <div class="col-md-6 col-lg-6">
-                                <div class="view-gallery">
-                                    <div class="view-label-group">
-                                        <label class="view-label new">new</label><label
-                                            class="view-label off">-10%</label>
+                            <div class="col-12 col-md-12 col-lg-12">
+                                <div class="user-form-card">
+                                    <div class="user-form-title">
+                                    <h2>Customer Login</h2>
+                                    <p>Use your credentials to access</p>
                                     </div>
-                                    <ul class="preview-slider slider-arrow">
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                    </ul>
-                                    <ul class="thumb-slider">
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                        <li><img src="./assets/images/product/01.jpg" alt="product" /></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6">
-                                <div class="view-details">
-                                    <h3 class="view-name">
-                                        <a href="product-video.html">existing product name</a>
-                                    </h3>
-                                    <div class="view-meta">
-                                        <p>SKU:<span>1234567</span></p>
-                                        <p>BRAND:<a href="#">radhuni</a></p>
-                                    </div>
-                                    <div class="view-rating">
-                                        <i class="active icofont-star"></i><i class="active icofont-star"></i><i
-                                            class="active icofont-star"></i><i class="active icofont-star"></i><i
-                                            class="icofont-star"></i><a href="product-video.html">(3 reviews)</a>
-                                    </div>
-                                    <h3 class="view-price">
-                                        <del>$38.00</del><span>$24.00<small>/per kilo</small></span>
-                                    </h3>
-                                    <p class="view-desc">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit non
-                                        tempora magni repudiandae sint suscipit tempore quis maxime
-                                        explicabo veniam eos reprehenderit fuga
-                                    </p>
-                                    <div class="view-list-group">
-                                        <label class="view-list-title">tags:</label>
-                                        <ul class="view-tag-list">
-                                            <li><a href="#">organic</a></li>
-                                            <li><a href="#">vegetable</a></li>
-                                            <li><a href="#">chilis</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="view-list-group">
-                                        <label class="view-list-title">Share:</label>
-                                        <ul class="view-share-list">
-                                            <li>
-                                                <a href="#" class="icofont-facebook" title="Facebook"></a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="icofont-twitter" title="Twitter"></a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="icofont-linkedin" title="Linkedin"></a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="icofont-instagram" title="Instagram"></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="view-add-group">
-                                        <button class="product-add" title="Add to Cart">
-                                            <i class="fas fa-shopping-basket"></i><span>add to cart</span>
-                                        </button>
-                                        <div class="product-action">
-                                            <button class="action-minus" title="Quantity Minus">
-                                                <i class="icofont-minus"></i></button><input class="action-input"
-                                                title="Quantity Number" type="text" name="quantity" value="1" /><button
-                                                class="action-plus" title="Quantity Plus">
-                                                <i class="icofont-plus"></i>
-                                            </button>
+                                    <div class="user-form-group" id="axiosForm">
+                                    <Form class="user-form" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors,isSubmitting }">         
+                                        <div class="form-group">
+                                        <Field name="phone" type="text" class="form-control" placeholder="phone no" :class="{'is-invalid': errors.phone}"/>
+                                        <span class="text-danger" v-if="errors.phone">{{ errors.phone }}</span>
                                         </div>
-                                    </div>
-                                    <div class="view-action-group">
-                                        <a class="view-wish wish" href="#" title="Add Your Wishlist"><i
-                                                class="icofont-heart"></i><span>add to
-                                                wish</span></a><a class="view-compare" href="compare.html"
-                                            title="Compare This Item"><i class="fas fa-random"></i><span>Compare
-                                                This</span></a>
+                                        <div class="form-group">
+                                        <Field name="password" :type="passwordShow ? 'password' : 'text'" class="form-control" placeholder="password" :class="{'is-invalid': errors.password}"/>
+                                        <span @click="toggleShow" class="view-password">
+                                            <i class="fas text-success" 
+                                            :class="passwordShow ? 'fa-eye' : 'fa-eye-slash'"
+                                            ></i>
+                                        </span><!--v-if-->
+                                        <span class="text-danger" v-if="errors.password">{{ errors.password }}</span>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="check" value=""><label class="form-check-label" for="check">Remember Me</label>
+                                        </div>
+                                        <div class="form-button">
+                                        <button type="submit" style="margin-bottom: 10px" :disabled="isSubmitting">
+                                            login
+                                        <span v-show="isSubmitting" class="spinner-border spinner-border-sm ms-1"></span>
+                                        </button>
+                                        <p>
+                                        Don't have any account? <router-link :to="{ name: 'user.register' }">Register Here</router-link>
+                                    </p>
+                                        </div>
+                                    </Form>
                                     </div>
                                 </div>
                             </div>

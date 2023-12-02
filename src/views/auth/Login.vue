@@ -86,7 +86,3 @@
       </section>
   </div>
 </template>
-
-<style>
-    @import "@/assets/css/user-auth.css";
-</style>

@@ -1,6 +1,6 @@
 <script setup>
     import { ProductPrice } from "@/components";
-    import { useCart, useNotification } from "@/stores";
+    import { useCart, useNotification, userAuth } from "@/stores";
     import { ref } from "vue";
 
     const props = defineProps({
@@ -10,10 +10,12 @@
         },
     });
 
+    const auth = userAuth();
     const cart = useCart();
     const price = ref();
     const notify = useNotification();
 
+    // Add To Cart
     function addToCart(product){
         if(product.price){
             var discount = (product.discount * product.price) / 100;
@@ -25,13 +27,23 @@
         }
 
         cart.addToCart({
-            id: product.id,
-            name: product.name,
-            price: product.price,
+            id       : product.id,
+            name     : product.name,
+            price    : product.price,
             thumbnail: product.thumbnail,
         });
 
         notify.notificationElement('success', `${product.name} Added Successful`, "Success");
+    }
+
+    // Wishlist
+
+    const addToWishlist = (product) => {
+        if(auth.user.data){
+            alert("Login");
+        }else{
+            $("#login-modal").modal('show');
+        }
     }
 
 </script>
@@ -44,8 +56,7 @@
                         <label class="label-text sale" v-if="product.discount">{{ product.discount }}%</label>
                         <label class="label-text new">{{ product.conditions }}</label>
                     </div>
-                    <button class="product-wish wish">
-                        <i class="fas fa-heart"></i></button>
+                    <button class="product-wish wish" @click.prevent="addToWishlist(product)"><i class="fas fa-heart"></i></button>
                         <router-link class="product-image" :to="{name: 'product.details'}">
                             <img :src="$filters.makeImagePath(product.thumbnail)"
                             alt="product" />
