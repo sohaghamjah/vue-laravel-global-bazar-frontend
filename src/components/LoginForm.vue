@@ -36,6 +36,7 @@
             router.push({
                 name: route.path === '/user/login' ? 'home' : ''
             });
+            $("#login-modal").modal('hide');
             notify.notificationElement('success', 'Congrats, Your Are Logged Id!', 'Success');
         } else {
             setErrors(response);
