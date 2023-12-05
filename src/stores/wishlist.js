@@ -1,5 +1,6 @@
 import axiosInstance from "@/services/axiosService";
 import { defineStore } from "pinia";
+import { userAuth } from "./auth";
 
 export const useWishlist = defineStore("wishlist", {
     state: () => ({
@@ -26,15 +27,25 @@ export const useWishlist = defineStore("wishlist", {
                     product_id: product.id
                 });
 
+                const auth = userAuth();
+                
+                if(response.status === 201){
+                    auth.user.meta.wishlists.push(product);
+                }else{
+                    const index = auth.user.meta.wishlists.findIndex((i) => i.id == product.id);
+                    auth.user.meta.wishlists.splice(index, 1);
+                }
+
                 if(response.status){
                     return new Promise((resolve) => {
-                        resolve(response.data);
+                        resolve(response);
                     })
                 }
 
             }catch(error){
                 console.log(error);
             }
-        }
+        },
+
     },
 })

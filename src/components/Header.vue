@@ -118,8 +118,9 @@ const userLogout = async () => {
                 </li>
               </ul>
             </li>
-            <a href="wishlist.html" class="header-widget" title="Wishlist"><i
-                class="fas fa-heart"></i><sup>0</sup></a><button class="header-widget header-cart" @click="cartShow" title="Cartlist">
+            <router-link v-if="user.data" :to="{name: 'user.wishlist'}" class="header-widget" title="Wishlist"><i
+                class="fas fa-heart"></i><sup>{{ user.meta.wishlists.length }}</sup></router-link>
+            <button class="header-widget header-cart" @click="cartShow" title="Cartlist">
               <i class="fas fa-shopping-basket"></i><sup>{{ cartItemsCount }}</sup><span>total price<small>{{ $filters.currencySymbol(cartTotal) }}</small></span>
             </button>
           </div>
