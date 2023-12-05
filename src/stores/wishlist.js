@@ -5,16 +5,15 @@ import { userAuth } from "./auth";
 export const useWishlist = defineStore("wishlist", {
     state: () => ({
         wishlists: {},
+        loading: false,
     }),
     actions:{
         async getWishlists(){
             try {
-                let response = await axiosInstance.get("/wishlists");
-                if(response.status == 200){
-                    this.wishlists = response.data;
-                    return new Promise((resolve) => {
-                        resolve(response.data);
-                    })
+                let response = await axiosInstance.get("/user/wishlist");
+                if(response.status === 200){
+                    const auth = userAuth();
+                    auth.user.meta.wishlists = response.data.data; 
                 }
             } catch (error) {
               console.log(error);
@@ -22,6 +21,7 @@ export const useWishlist = defineStore("wishlist", {
         },
 
         async addToWishlist(product){
+            this.loading = product.id;
             try{
                 let response = await axiosInstance.post("/user/wishlist/store", {
                     product_id: product.id
@@ -44,6 +44,9 @@ export const useWishlist = defineStore("wishlist", {
 
             }catch(error){
                 console.log(error);
+            }
+            finally{
+                this.loading = false
             }
         },
 

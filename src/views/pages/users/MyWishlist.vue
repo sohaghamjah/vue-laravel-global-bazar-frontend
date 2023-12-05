@@ -1,12 +1,21 @@
 <script setup>
-import { userAuth, useWishlist, useNotification } from '@/stores';
+import { userAuth, useWishlist, useNotification, useCart } from '@/stores';
 import { storeToRefs } from 'pinia';
 import { ProductPrice } from '@/components';
+import { onMounted, ref } from 'vue'
 
 const auth = userAuth();
 const wishlist = useWishlist();
 const notify = useNotification();
 const { user } = storeToRefs(auth);
+const cart     = useCart();
+const price    = ref();
+
+// Wishlist Get
+
+onMounted(() => {
+    wishlist.getWishlists();
+});
 
 // Wishlist Remove
 
@@ -16,6 +25,27 @@ const destroyWishlist = async (product) => {
   if (res.status === 200) {
     notify.notificationElement('success', `${product.name} Remove From Your Wishlist`)
   } 
+}
+
+// Add To Cart
+function addToCart(product) {
+    if (product.discount) {
+        var discount = (product.discount * product.price) / 100;
+        var product_price = product.price - discount;
+        price.value = product_price.toFixed();
+    } else {
+        var product_price = product.price;
+        price.value = product_price.toFixed();
+    }
+
+    cart.addToCart({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        thumbnail: product.thumbnail,
+    });
+
+    notify.notificationElement('success', `${product.name} Added Successful`, "Success");
 }
 
 </script>
@@ -63,7 +93,7 @@ const destroyWishlist = async (product) => {
                         <ProductPrice :product="product" />
                       </td>
                       <td class="table-shop">
-                        <button class="product-add" title="Add to Cart">
+                        <button class="product-add" @click.prevent="addToCart(product)" title="Add to Cart">
                           add to cart</button
                         ><!-- fas fa-spinner fa-spin -->
                       </td>
@@ -73,7 +103,9 @@ const destroyWishlist = async (product) => {
                           href="javascript::void(0)"
                           title="Remove Wishlist"
                           @click.prevent="destroyWishlist(product)"
-                          ><i class="icofont-trash"></i
+                          >
+                          <i class="fa fa-spinner fa-spin delete_icon" v-if="wishlist.loading == product.id" aria-hidden="true"></i>
+                          <i class="icofont-trash delete_icon" v-else></i
                         ></a>
                       </td>
                     </tr>
@@ -94,4 +126,10 @@ const destroyWishlist = async (product) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+  .delete_icon{
+    color: #ff3838;
+  }
+</style>
 

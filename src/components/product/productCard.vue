@@ -52,7 +52,7 @@
         if (auth.user.data) {
             let res = await wishlist.addToWishlist(product);
 
-            notify.notificationElement('success', `${product.name} ${res.message}`)
+            notify.notificationElement('success', `${product.name} ${res.data.message}`)
 
         } else {
             $("#login-modal").modal('show');
