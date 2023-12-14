@@ -1,3 +1,25 @@
+<script setup>
+    import { useSeller } from '@/stores';
+    import { storeToRefs } from 'pinia';
+    import { onMounted, ref } from 'vue';
+    import { Bootstrap5Pagination } from 'laravel-vue-pagination';
+
+
+    const seller = useSeller();
+    const { sellers } = storeToRefs(seller);
+
+    onMounted(() => {
+        getSellers();
+    });
+
+    const show = ref(10);
+
+    const getSellers = async (page = 1) => {
+        await seller.getSeller(page, show.value);
+    }
+
+
+</script>
 <template>
     <div>
         <section class="inner-section single-banner">
@@ -11,7 +33,8 @@
                     <div class="col-lg-12">
                         <div class="top-filter">
                             <div class="filter-show">
-                                <label class="filter-label">Show :</label><select class="form-select filter-select">
+                                <label class="filter-label">Show :</label>
+                                <select class="form-select filter-select" v-model="show" @change="getSellers">
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="30">30</option>
@@ -24,135 +47,19 @@
                     </div>
                 </div>
                 <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 isotope-items">
-                    <div class="col">
+                    <div class="col" v-for="(seller, index) in sellers.data" :key="index">
                         <div class="product-card">
                             <ul>
                                 <li>
-                                    <router-link :to="{name: 'seller-store'}">Seller List</router-link>
+                                    <a href=""
+                                    class="suggest-card"
+                                    ><img :src="$filters.makeImagePath(seller.image)"
+                                        alt="seller lists"
+                                    /></a>
                                     <div class="brand-meta">
-                                        <h4 class="text-center">dafad</h4>
+                                        <h4 class="text-center">{{ seller.shop_name }}</h4>
                                         <p class="text-center">0 Products</p>
-                                        <div class="form-button">
-                                            <button type="submit">
-                                                Visit Store <i class="fas fa-angle-right"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a href="shop-4column.html" class="suggest-card"><img
-                                            src="http://127.0.0.1:8000/uploads/seller/shop/06302022121319pBkM9ZNbR53vC4RO_250_250.png"
-                                            alt="seller lists" /></a>
-                                    <div class="brand-meta">
-                                        <h4 class="text-center">dafa</h4>
-                                        <p class="text-center">0 Products</p>
-                                        <div class="form-button">
-                                            <button type="submit">
-                                                Visit Store <i class="fas fa-angle-right"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a href="shop-4column.html" class="suggest-card"><img
-                                            src="http://127.0.0.1:8000/uploads/seller/shop/06302022121319pBkM9ZNbR53vC4RO_250_250.png"
-                                            alt="seller lists" /></a>
-                                    <div class="brand-meta">
-                                        <h4 class="text-center">data is missing</h4>
-                                        <p class="text-center">0 Products</p>
-                                        <div class="form-button">
-                                            <button type="submit">
-                                                Visit Store <i class="fas fa-angle-right"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a href="shop-4column.html" class="suggest-card"><img
-                                            src="http://127.0.0.1:8000/uploads/seller/shop/06302022121319pBkM9ZNbR53vC4RO_250_250.png"
-                                            alt="seller lists" /></a>
-                                    <div class="brand-meta">
-                                        <h4 class="text-center">testijng data</h4>
-                                        <p class="text-center">0 Products</p>
-                                        <div class="form-button">
-                                            <button type="submit">
-                                                Visit Store <i class="fas fa-angle-right"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a href="shop-4column.html" class="suggest-card"><img
-                                            src="http://127.0.0.1:8000/uploads/seller/shop/06302022121319pBkM9ZNbR53vC4RO_250_250.png"
-                                            alt="seller lists" /></a>
-                                    <div class="brand-meta">
-                                        <h4 class="text-center">any data</h4>
-                                        <p class="text-center">0 Products</p>
-                                        <div class="form-button">
-                                            <button type="submit">
-                                                Visit Store <i class="fas fa-angle-right"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a href="shop-4column.html" class="suggest-card"><img
-                                            src="http://127.0.0.1:8000/uploads/seller/shop/06302022121319pBkM9ZNbR53vC4RO_250_250.png"
-                                            alt="seller lists" /></a>
-                                    <div class="brand-meta">
-                                        <h4 class="text-center">SS Computer</h4>
-                                        <p class="text-center">0 Products</p>
-                                        <div class="form-button">
-                                            <button type="submit">
-                                                Visit Store <i class="fas fa-angle-right"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <a href="shop-4column.html" class="suggest-card"><img
-                                            src="http://127.0.0.1:8000/uploads/seller/shop/07022022032357LeHFrk4a5SWRJcDf_250_250.jpg"
-                                            alt="seller lists" /></a>
-                                    <div class="brand-meta">
-                                        <h4 class="text-center">Uc Techonology</h4>
-                                        <p class="text-center">11 Products</p>
-                                        <div class="form-button">
+                                        <div class="form-button" >
                                             <button type="submit">
                                                 Visit Store <i class="fas fa-angle-right"></i>
                                             </button>
@@ -167,27 +74,25 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="bottom-paginate">
-                            <p class="page-info">Showing 12 of 60 Results</p>
+                            <p class="page-info">Showing {{ sellers.meta.per_page > sellers.meta.total ? sellers.meta.total : sellers.meta.per_page  }} of {{ sellers.meta.total }} Results</p>
                             <ul class="pagination">
-                                <li class="page-item">
-                                    <a class="page-link" href="#"><i class="fas fa-long-arrow-alt-left"></i></a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link active" href="#">1</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">2</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">3</a>
-                                </li>
-                                <li class="page-item">...</li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">60</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#"><i class="fas fa-long-arrow-alt-right"></i></a>
-                                </li>
+                                <Bootstrap5Pagination
+                                    :data="sellers"
+                                    @pagination-change-page="getSellers"
+                                >
+
+                                    <template #prev-nav>
+                                        <a class="page-link" href="#"
+                                        ><i class="fas fa-long-arrow-alt-left"></i
+                                        ></a>
+                                    </template>
+                                    <template #next-nav>
+                                        <a class="page-link" href="#"
+                                        ><i class="fas fa-long-arrow-alt-right"></i
+                                        ></a>
+                                    </template>
+
+                                </Bootstrap5Pagination>
                             </ul>
                         </div>
                     </div>
@@ -197,12 +102,9 @@
     </div>
 </template>
 
-<script>
-export default {
-
-}
-</script>
 
 <style>
-
+    .page-item.active .page-link {
+    background: #119744;
+    }
 </style>
