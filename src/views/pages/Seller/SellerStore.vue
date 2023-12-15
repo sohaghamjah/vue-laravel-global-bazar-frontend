@@ -4,7 +4,7 @@
     import { onMounted, ref } from 'vue';
     import { storeToRefs } from 'pinia';
     import { productCard } from '@/components';
-    import { ProductSkeleton } from "@/components/skeleton";
+    import { ProductSkeleton, StoreBannerSkeleton } from "@/components/skeleton";
     import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
     const seller = useSeller();
@@ -25,26 +25,28 @@
 
 </script>
 <template>
-    <div v-if="seller_store.data">
-        <section class="single-banner" style="
-          background: url('//website/images/single-banner.jpg') center center
-            no-repeat;
-        ">
-            <div class="container">
-                <h2>Seller Products</h2>
-            </div>
-        </section>
-        <div class="brand-single text-center">
-            <a href="#">
-                <div>
-                    <img class="single_store_img" :src="$filters.makeImagePath(seller_store.data.image)"
-                        alt="product" />
+    <div>
+        <template v-if="seller_store.data">
+            <section class="single-banner">
+                <div class="container">
+                    <h2>Seller Products</h2>
                 </div>
-            </a>
-            <a href="#">
-                <h3>{{ seller_store.data.shop_name }}</h3>
-            </a>
-        </div>
+            </section>
+            <div class="brand-single text-center">
+                <a href="#">
+                    <div>
+                        <img class="single_store_img" :src="$filters.makeImagePath(seller_store.data.image)"
+                            alt="product" />
+                    </div>
+                </a>
+                <a href="#">
+                    <h3>{{ seller_store.data.shop_name }}</h3>
+                </a>
+            </div>
+        </template>
+        <template v-else>
+            <StoreBannerSkeleton />
+        </template>
         <section class="inner-section shop-part">
             <div class="container">
                 <div class="row" v-if="seller_store.data">

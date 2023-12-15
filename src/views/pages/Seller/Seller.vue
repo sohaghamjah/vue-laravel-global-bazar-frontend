@@ -4,6 +4,9 @@
     import { onMounted, ref } from 'vue';
     import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
+    import { 
+        CategorySkeleton, 
+    } from "@/components/skeleton";
 
     const seller = useSeller();
     const { sellers } = storeToRefs(seller);
@@ -48,32 +51,38 @@
                 </div>
 
                 <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 isotope-items">
-                    <div class="col" v-for="(seller, index) in sellers.data" :key="index">
-                        <div class="product-card">
-                            <ul>
-                                <li>
-                                    <router-link :to="{
-                                        name: 'seller-store', 
-                                        params: {slug: seller.slug}
-                                    }" 
-                                    class="suggest-card">
-                                        <img :src="$filters.makeImagePath(seller.image)"
-                                            alt="seller lists"
-                                        />
-                                    </router-link>
-                                    <div class="brand-meta">
-                                        <h4 class="text-center">{{ seller.shop_name }}</h4>
-                                        <p class="text-center">{{ seller.products_count }} Products</p>
-                                        <div class="form-button" >
-                                            <button type="submit">
-                                                Visit Store <i class="fas fa-angle-right"></i>
-                                            </button>
+                    <template v-if="sellers.data">
+                        <div class="col" v-for="(seller, index) in sellers.data" :key="index">
+                            <div class="product-card">
+                                <ul>
+                                    <li>
+                                        <router-link :to="{
+                                            name: 'seller-store', 
+                                            params: {slug: seller.slug}
+                                        }" 
+                                        class="suggest-card">
+                                            <img :src="$filters.makeImagePath(seller.image)"
+                                                alt="seller lists"
+                                            />
+                                        </router-link>
+                                        <div class="brand-meta">
+                                            <h4 class="text-center">{{ seller.shop_name }}</h4>
+                                            <p class="text-center">{{ seller.products_count }} Products</p>
+                                            <div class="form-button" >
+                                                <button type="submit">
+                                                    Visit Store <i class="fas fa-angle-right"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
-                            </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
+                    </template>
+
+                    <template v-else>
+                        <CategorySkeleton :dataAmount="10" />
+                    </template>
                 </div>
 
                 <div class="row"  v-if="sellers.meta">

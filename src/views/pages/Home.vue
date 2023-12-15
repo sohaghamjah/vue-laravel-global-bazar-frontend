@@ -11,7 +11,8 @@
     } from "@/components/skeleton";
     import { Swiper, SwiperSlide } from "swiper/vue";
     import { Autoplay, Pagination, Navigation } from "swiper";
-import { data } from "dom7";
+    import { data } from "dom7";
+    
     const modules = ref([Autoplay, Pagination]);
     const newSlide = ref([Autoplay, Navigation]);
 
