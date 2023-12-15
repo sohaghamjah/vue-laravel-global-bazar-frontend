@@ -6,6 +6,7 @@
 
 
     const seller = useSeller();
+
     const { sellers } = storeToRefs(seller);
 
     onMounted(() => {
@@ -58,7 +59,7 @@
                                     /></a>
                                     <div class="brand-meta">
                                         <h4 class="text-center">{{ seller.shop_name }}</h4>
-                                        <p class="text-center">0 Products</p>
+                                        <p class="text-center">{{ seller.products_count }} Products</p>
                                         <div class="form-button" >
                                             <button type="submit">
                                                 Visit Store <i class="fas fa-angle-right"></i>
@@ -71,10 +72,10 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row"  v-if="sellers.meta">
                     <div class="col-lg-12">
                         <div class="bottom-paginate">
-                            <p class="page-info">Showing {{ sellers.meta.per_page > sellers.meta.total ? sellers.meta.total : sellers.meta.per_page  }} of {{ sellers.meta.total }} Results</p>
+                            <p class="page-info" >Showing {{ sellers.meta.per_page > sellers.meta.total ? sellers.meta.total : sellers.meta.per_page  }} of {{ sellers.meta.total }} Results</p>
                             <ul class="pagination">
                                 <Bootstrap5Pagination
                                     :data="sellers"
