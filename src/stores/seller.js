@@ -21,9 +21,9 @@ export const useSeller = defineStore("seller", {
             }
         },
 
-        async sellerProductBySlug(slug){
+        async sellerProductBySlug(slug, page, show, sort){
             try {
-                let response = await axiosInstance.get(`/seller/products/${slug}`);
+                let response = await axiosInstance.get(`/seller/products/${slug}?page=${page}&show=${show}&sort=${sort}`);
                 if(response.status == 200){
                     this.seller_store = response.data;
                 }

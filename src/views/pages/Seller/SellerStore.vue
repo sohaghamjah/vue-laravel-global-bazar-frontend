@@ -1,18 +1,26 @@
 <script setup>
     import  { useRoute } from 'vue-router';
     import { useSeller } from '@/stores';
-    import { onMounted } from 'vue';
+    import { onMounted, ref } from 'vue';
     import { storeToRefs } from 'pinia';
     import { productCard } from '@/components';
     import { ProductSkeleton } from "@/components/skeleton";
+    import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
     const seller = useSeller();
     const route = useRoute();
 
     const { seller_store } = storeToRefs(seller);
 
+    const show = ref(10);
+    const sort = ref('default');
+    
+    const getSellerProducts = (page = 1) => {
+        seller.sellerProductBySlug(route.params.slug, page, show.value, sort.value);
+    } 
+
     onMounted(() => {
-        seller.sellerProductBySlug(route.params.slug);
+        getSellerProducts();
     })
 
 </script>
@@ -39,24 +47,33 @@
         </div>
         <section class="inner-section shop-part">
             <div class="container">
-                <div class="row">
+                <div class="row" v-if="seller_store.data">
                     <div class="col-lg-12">
                         <div class="top-filter">
                             <div class="filter-show">
-                                <label class="filter-label">Show :</label><select class="form-select filter-select">
+                                <label class="filter-label">Show :</label>
+                                <select class="form-select filter-select" 
+                                    v-model="show" 
+                                    @change="getSellerProducts"
+                                >
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="30">30</option>
-                                    <option value="50">50</option>
+                                    <option value="5">50</option>
                                     <option value="100">100</option>
+                                    <option value="200">200</option>
                                 </select>
                             </div>
                             <div class="filter-short">
-                                <label class="filter-label">Short by :</label><select class="form-select filter-select">
-                                    <option value="">default</option>
+                                <label class="filter-label">Short by :</label>
+                                <select class="form-select filter-select"
+                                    v-model="sort" 
+                                    @change="getSellerProducts"
+                                >
+                                    <option value="default">default</option>
                                     <option value="new">New</option>
                                     <option value="popular">Popular</option>
-                                    <!-- <option value="winter">Winter</option> -->
+                                    <option value="winter">Winter</option>
                                     <option value="feature">Feature</option>
                                 </select>
                             </div>
@@ -66,11 +83,37 @@
 
                 <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
                     <template v-if="seller_store.data">
-                        <productCard :product="product" v-for="(product, index) in seller_store.data.products" :key="index"/>
+                        <productCard :product="product" v-for="(product, index) in seller_store.products.data" :key="index"/>
                     </template>
                     <template v-else>
                         <ProductSkeleton :dataAmount="10" />
                     </template>
+                </div>
+
+                <div class="row"  v-if="seller_store.data">
+                    <div class="col-lg-12">
+                        <div class="bottom-paginate">
+                            <p class="page-info" >Showing {{ seller_store.products.per_page > seller_store.products.total ? seller_store.products.total : seller_store.products.per_page  }} of {{ seller_store.products.total }} Results</p>
+                            <ul class="pagination">
+                                <Bootstrap5Pagination
+                                    :data="seller_store.products"
+                                    @pagination-change-page="getSellerProducts"
+                                >
+                                    <template #prev-nav>
+                                        <a class="page-link" href="#"
+                                        ><i class="fas fa-long-arrow-alt-left"></i
+                                        ></a>
+                                    </template>
+                                    <template #next-nav>
+                                        <a class="page-link" href="#"
+                                        ><i class="fas fa-long-arrow-alt-right"></i
+                                        ></a>
+                                    </template>
+
+                                </Bootstrap5Pagination>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
