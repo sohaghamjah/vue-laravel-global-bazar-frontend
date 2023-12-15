@@ -6,7 +6,6 @@
 
 
     const seller = useSeller();
-
     const { sellers } = storeToRefs(seller);
 
     onMounted(() => {
@@ -30,7 +29,7 @@
         </section>
         <section class="inner-section">
             <div class="container">
-                <div class="row">
+                <div class="row" v-if="sellers.meta">
                     <div class="col-lg-12">
                         <div class="top-filter">
                             <div class="filter-show">
@@ -47,16 +46,21 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 isotope-items">
                     <div class="col" v-for="(seller, index) in sellers.data" :key="index">
                         <div class="product-card">
                             <ul>
                                 <li>
-                                    <a href=""
-                                    class="suggest-card"
-                                    ><img :src="$filters.makeImagePath(seller.image)"
-                                        alt="seller lists"
-                                    /></a>
+                                    <router-link :to="{
+                                        name: 'seller-store', 
+                                        params: {slug: seller.slug}
+                                    }" 
+                                    class="suggest-card">
+                                        <img :src="$filters.makeImagePath(seller.image)"
+                                            alt="seller lists"
+                                        />
+                                    </router-link>
                                     <div class="brand-meta">
                                         <h4 class="text-center">{{ seller.shop_name }}</h4>
                                         <p class="text-center">{{ seller.products_count }} Products</p>
@@ -81,7 +85,6 @@
                                     :data="sellers"
                                     @pagination-change-page="getSellers"
                                 >
-
                                     <template #prev-nav>
                                         <a class="page-link" href="#"
                                         ><i class="fas fa-long-arrow-alt-left"></i

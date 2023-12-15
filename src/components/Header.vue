@@ -12,7 +12,6 @@ const { cartItemsCount, cartTotal } = storeToRefs(cart);
 
 const userLogout = async () => {
   const res = await auth.logout();
-  console.log(res);
   if(res.status){
     router.push({ name: 'home'});
     notify.notificationElement('success', 'Logout Successfully!', 'Logout');

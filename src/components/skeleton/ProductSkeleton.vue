@@ -9,8 +9,7 @@
 </script>
 
 <template>
-    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
-        <div class="col mb-4 " v-for="(product, index) in dataAmount" :key="index">
+   <div class="col mb-4 " v-for="(product, index) in dataAmount" :key="index">
             <div class="ssc ssc-card" style="max-width: 300px">
                 <div class="ssc-wrapper">
                     <div class="ssc-square mb"></div>
@@ -29,5 +28,4 @@
                 </div>
             </div>
         </div>
-    </div>
 </template>

@@ -112,13 +112,14 @@ import { data } from "dom7";
                         </div>
                     </div>
                 </div>
-
-                <template v-if="products.data">
-                    <productCard :products="products" />
-                </template>
-                <template v-else>
-                    <ProductSkeleton :dataAmount="10" />
-                </template>
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+                    <template v-if="products.data">
+                        <productCard :product="product" v-for="(product, index) in products.data" :key="index"/>
+                    </template>
+                    <template v-else>
+                        <ProductSkeleton :dataAmount="10" />
+                    </template>
+                </div>
               
                 <div class="row">
                     <div class="col-lg-12">
@@ -140,13 +141,15 @@ import { data } from "dom7";
                         </div>
                     </div>
                 </div>
-                <template v-if="popular.data">
-                    <productCard :products="popular" />
-                </template>
-                <template v-else>
-                    <ProductSkeleton :dataAmount="10" />
-                </template>
-                
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+                    <template v-if="popular.data">
+                        <productCard :product="product" v-for="(product, index) in popular.data" :key="index"/>
+                    </template>
+                    <template v-else>
+                        <ProductSkeleton :dataAmount="10" />
+                    </template>
+                </div>
+                    
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-btn-25">
@@ -167,13 +170,14 @@ import { data } from "dom7";
                         </div>
                     </div>
                 </div>
-
-                <template v-if="sold.data">
-                    <productCard :products="sold" />
-                </template>
-                <template v-else>
-                    <ProductSkeleton :dataAmount="10" />
-                </template>
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+                    <template v-if="sold.data">
+                        <productCard :product="product" v-for="(product, index) in sold.data" :key="index"/>
+                    </template>
+                    <template v-else>
+                        <ProductSkeleton :dataAmount="10" />
+                    </template>
+                </div>
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -195,13 +199,14 @@ import { data } from "dom7";
                         </div>
                     </div>
                 </div>
-
-                <template v-if="winter.data">
-                    <productCard :products="winter" />
-                </template>
-                <template v-else>
-                    <ProductSkeleton :dataAmount="10" />
-                </template>
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+                    <template v-if="winter.data">
+                        <productCard :product="product" v-for="(product, index) in winter.data" :key="index"/>
+                    </template>
+                    <template v-else>
+                        <ProductSkeleton :dataAmount="10" />
+                    </template>
+                </div>
                 
                 <div class="row">
                     <div class="col-lg-12">

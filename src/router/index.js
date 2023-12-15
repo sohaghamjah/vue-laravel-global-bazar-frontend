@@ -47,7 +47,7 @@ const routes =[
         meta: {title: 'Seller'}
     },
     {
-        path: '/seller-store', 
+        path: '/seller-store/:slug', 
         name: 'seller-store',
         component: SellerStore,
         meta: {title: 'Seller Store'}

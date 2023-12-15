@@ -5919,7 +5919,6 @@ tbody tr td:last-child {
   padding: 100px 0px;
   text-align: center;
   position: relative;
-  z-index: 1;
 }
 .single-banner::before {
   position: absolute;
