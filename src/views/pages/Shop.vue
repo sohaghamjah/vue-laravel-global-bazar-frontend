@@ -1,9 +1,9 @@
 <script setup>
     import { useShop } from '@/stores';
-    import { onMounted, ref } from 'vue';
+    import { onMounted, ref, computed } from 'vue';
     import { storeToRefs } from 'pinia';
     import { productCard } from '@/components';
-    import { ProductSkeleton } from "@/components/skeleton";
+    import { ProductSkeleton, ShopSidebarSkeleton } from "@/components/skeleton";
     import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
 
@@ -23,6 +23,23 @@
         shop.getProducts(page, show.value, sort.value);
     }
 
+    const searchBrandText = ref('');
+    const searchCategoryText = ref('');
+
+    // Brand And Category Search
+
+    const searchBrandData =  computed(() => {
+        return shop.sidebar_data.data.brands.filter((brand) => {
+            return brand.name.toLowerCase().match(searchBrandText.value.toLowerCase());
+        })
+    });
+
+    const searchCategoryData = computed(() => {
+        return shop.sidebar_data.data.categories.filter((category) => {
+            return category.name.toLowerCase().match(searchCategoryText.value.toLowerCase());
+        })
+    });
+
 </script>
 <template>
   <div>
@@ -34,57 +51,69 @@
       <section class="inner-section shop-part">
           <div class="container">
               <div class="row content-reverse">
-                  <div class="col-lg-3" v-if="sidebar_data.data">
-                      <!-- <div class="shop-widget-promo">
-                            <a href="#"><img src="@/images/promo/shop/01.jpg" alt="promo" /></a>
-                        </div> -->
-                      <div class="shop-widget">
-                          <h6 class="shop-widget-title">Filter by Price</h6>
-                          <form>
-                              <div class="shop-widget-group">
-                                  <input type="text" :placeholder="`Min - ${$filters.currencySymbol((sidebar_data.data.price.min_price))}`" /><input type="text"
-                                      :placeholder="`Max - ${$filters.currencySymbol((sidebar_data.data.price.max_price))}`" />
-                              </div>
-                              <button class="shop-widget-btn">
-                                  <i class="fas fa-search"></i><span>search</span>
-                              </button>
-                          </form>
-                      </div>
+                  <div class="col-lg-3">
 
-                      <div class="shop-widget">
-                          <h6 class="shop-widget-title">Filter by Brand</h6>
-                          <form>
-                              <input class="shop-widget-search" type="text" placeholder="Search..." />
-                              <ul class="shop-widget-list shop-widget-scroll">
-                                  <li v-for="brand in sidebar_data.data.brands"  :key="brand.id">
-                                      <div class="shop-widget-content">
-                                          <input type="checkbox" id="brand1" /><label for="brand1">{{ brand.name }}</label>
-                                      </div>
-                                      <span class="shop-widget-number">({{ brand.products_count }})</span>
-                                  </li>
-                              </ul>
-                              <button class="shop-widget-btn">
-                                  <i class="far fa-trash-alt"></i><span>clear filter</span>
-                              </button>
-                          </form>
-                      </div>
-                      <div class="shop-widget">
-                          <h6 class="shop-widget-title">Filter by Category</h6>
-                          <form>
-                              <input class="shop-widget-search" type="text" placeholder="Search..." />
-                              <ul class="shop-widget-list shop-widget-scroll">
-                                  <li v-for="category in sidebar_data.data.categories" :key="category.id">
-                                      <div class="shop-widget-content">
-                                          <input type="checkbox" id="cate1" /><label for="cate1">{{ category.name }}</label>
-                                      </div>
-                                      <span class="shop-widget-number">({{ category.products_count }})</span>
+                    <template v-if="sidebar_data.data">
+                        <div class="shop-widget">
+                            <h6 class="shop-widget-title">Filter by Price</h6>
+                            <form>
+                                <div class="shop-widget-group">
+                                    <input type="text" :placeholder="`Min - ${$filters.currencySymbol((sidebar_data.data.price.min_price))}`" /><input type="text"
+                                        :placeholder="`Max - ${$filters.currencySymbol((sidebar_data.data.price.max_price))}`" />
+                                </div>
+                                <button class="shop-widget-btn">
+                                    <i class="fas fa-search"></i><span>search</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="shop-widget">
+                            <h6 class="shop-widget-title">Filter by Brand</h6>
+                            <form>
+                                <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchBrandText" />
+                                <ul class="shop-widget-list shop-widget-scroll">
+                                    <li v-for="brand in searchBrandData"  :key="brand.id">
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="brand1" /><label for="brand1">{{ brand.name }}</label>
+                                        </div>
+                                        <span class="shop-widget-number">({{ brand.products_count }})</span>
                                     </li>
-                              </ul>
-                              <button class="shop-widget-btn">
-                                  <i class="far fa-trash-alt"></i><span>clear filter</span>
-                              </button>
-                          </form>
-                      </div>
+                                    <li v-if="searchBrandData.length == 0" class="text-center">
+                                            <p class="text-danger">No Result Found!</p>
+                                    </li>
+                                </ul>
+                                <button class="shop-widget-btn">
+                                    <i class="far fa-trash-alt"></i><span>clear filter</span>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="shop-widget">
+                            <h6 class="shop-widget-title">Filter by Category</h6>
+                            <form>
+                                <input class="shop-widget-search" type="text" placeholder="Search..." v-model="searchCategoryText"/>
+                                <ul class="shop-widget-list shop-widget-scroll">
+                                    <li v-for="category in searchCategoryData" :key="category.id">
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="cate1" /><label for="cate1">{{ category.name }}</label>
+                                        </div>
+                                        <span class="shop-widget-number">({{ category.products_count }})</span>
+                                        </li>
+
+                                        <li class="text-center" v-if="searchCategoryData.length == 0">
+                                            <p class="text-danger">No Result Found!</p>
+                                        </li>
+                                </ul>
+                                <button class="shop-widget-btn">
+                                    <i class="far fa-trash-alt"></i><span>clear filter</span>
+                                </button>
+                            </form>
+                        </div>
+                    </template>
+
+                    <template v-else>
+                        <ShopSidebarSkeleton />
+                    </template>
+
                   </div>
                   <div class="col-lg-9">
                         <div class="row">
