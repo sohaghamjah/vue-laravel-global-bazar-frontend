@@ -20,7 +20,7 @@
 
     const getProducts = (page = 1) => {
         products.value = [],
-        shop.getProducts(page, show.value, sort.value);
+        shop.getProducts(page, show.value, sort.value, selectedBrands.value, selectedCategories.value);
     }
 
     const searchBrandText = ref('');
@@ -39,6 +39,25 @@
             return category.name.toLowerCase().match(searchCategoryText.value.toLowerCase());
         })
     });
+
+    // Selected Brands
+    const selectedBrands = ref([]);
+    // Selected Category 
+    const selectedCategories = ref([]);
+
+    // Clear Filter
+
+    const clearFilter = (type) => {
+        switch (type) {
+            case 'categories':
+                selectedCategories.value = [];
+                break;
+            default:
+                selectedBrands.value = [];
+                break;
+        }
+        getProducts();
+    } 
 
 </script>
 <template>
@@ -74,7 +93,7 @@
                                 <ul class="shop-widget-list shop-widget-scroll">
                                     <li v-for="brand in searchBrandData"  :key="brand.id">
                                         <div class="shop-widget-content">
-                                            <input type="checkbox" id="brand1" /><label for="brand1">{{ brand.name }}</label>
+                                            <input type="checkbox" :id="`brand1-${brand.id}`" :value="brand.id" v-model="selectedBrands" @change="getProducts"/><label :for="`brand1-${brand.id}`">{{ brand.name }}</label>
                                         </div>
                                         <span class="shop-widget-number">({{ brand.products_count }})</span>
                                     </li>
@@ -82,7 +101,7 @@
                                             <p class="text-danger">No Result Found!</p>
                                     </li>
                                 </ul>
-                                <button class="shop-widget-btn">
+                                <button class="shop-widget-btn" @click.prevent="clearFilter('brands')">
                                     <i class="far fa-trash-alt"></i><span>clear filter</span>
                                 </button>
                             </form>
@@ -94,7 +113,7 @@
                                 <ul class="shop-widget-list shop-widget-scroll">
                                     <li v-for="category in searchCategoryData" :key="category.id">
                                         <div class="shop-widget-content">
-                                            <input type="checkbox" id="cate1" /><label for="cate1">{{ category.name }}</label>
+                                            <input type="checkbox" :id="`cate-${category.id}`" :value="category.id" v-model="selectedCategories" @change="getProducts" /><label :for="`cate-${category.id}`">{{ category.name }}</label>
                                         </div>
                                         <span class="shop-widget-number">({{ category.products_count }})</span>
                                         </li>
@@ -103,7 +122,7 @@
                                             <p class="text-danger">No Result Found!</p>
                                         </li>
                                 </ul>
-                                <button class="shop-widget-btn">
+                                <button class="shop-widget-btn" @click.prevent="clearFilter('categories')">
                                     <i class="far fa-trash-alt"></i><span>clear filter</span>
                                 </button>
                             </form>

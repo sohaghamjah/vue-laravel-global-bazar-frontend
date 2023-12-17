@@ -7,9 +7,17 @@ export const useShop = defineStore("shop", {
         sidebar_data: [],
     }),
     actions:{
-        async getProducts(page, show, sort){
+        async getProducts(page, show, sort, brands, categories){
             try {
-                let response = await axiosInstance.get(`/shop-products?page=${page}&show=${show}&sort=${sort}`);
+                let response = await axiosInstance.get(`/shop-products`,{
+                    params: {
+                        page,
+                        show,
+                        sort,
+                        brands,
+                        categories
+                    }
+                });
                 if(response.status == 200){
                     this.products = response.data;
                 }
