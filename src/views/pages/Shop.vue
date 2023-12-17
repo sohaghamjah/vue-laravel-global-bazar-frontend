@@ -20,7 +20,7 @@
 
     const getProducts = (page = 1) => {
         products.value = [],
-        shop.getProducts(page, show.value, sort.value, selectedBrands.value, selectedCategories.value);
+        shop.getProducts(page, show.value, sort.value, selectedBrands.value, selectedCategories.value, priceRangeSelect.value);
     }
 
     const searchBrandText = ref('');
@@ -59,6 +59,10 @@
         getProducts();
     } 
 
+    //  Filter By Price Range Picker
+
+    const priceRangeSelect = ref('');
+
 </script>
 <template>
   <div>
@@ -75,15 +79,17 @@
                     <template v-if="sidebar_data.data">
                         <div class="shop-widget">
                             <h6 class="shop-widget-title">Filter by Price</h6>
-                            <form>
+                            <el-slider v-model="priceRangeSelect" range :max="sidebar_data.data.price.max_price" :min="sidebar_data.data.price.min_price" @change="getProducts"  />
+
                                 <div class="shop-widget-group">
-                                    <input type="text" :placeholder="`Min - ${$filters.currencySymbol((sidebar_data.data.price.min_price))}`" /><input type="text"
-                                        :placeholder="`Max - ${$filters.currencySymbol((sidebar_data.data.price.max_price))}`" />
+                                    <input type="text" readonly :placeholder="`Min -  ${
+                                        priceRangeSelect[0] == null ? $filters.currencySymbol((sidebar_data.data.price.min_price)) : $filters.currencySymbol(priceRangeSelect[0])
+                                        }`" />
+                                        <input type="text" readonly
+                                        :placeholder="`Max - ${
+                                              priceRangeSelect[1] == null ? $filters.currencySymbol((sidebar_data.data.price.max_price)) : $filters.currencySymbol(priceRangeSelect[1])
+                                        }`" /> 
                                 </div>
-                                <button class="shop-widget-btn">
-                                    <i class="fas fa-search"></i><span>search</span>
-                                </button>
-                            </form>
                         </div>
 
                         <div class="shop-widget">
@@ -210,5 +216,7 @@
 </template>
 
 <style>
-
+.el-slider {
+    --el-slider-main-bg-color: #119744;
+}
 </style>
