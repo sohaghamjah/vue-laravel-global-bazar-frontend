@@ -7,7 +7,7 @@ export const useShop = defineStore("shop", {
         sidebar_data: [],
     }),
     actions:{
-        async getProducts(page, show, sort, brands, categories, price_range){
+        async getProducts(page, show, sort, brands, categories, price_range, search_text){
             try {
                 let response = await axiosInstance.get(`/shop-products`,{
                     params: {
@@ -16,7 +16,8 @@ export const useShop = defineStore("shop", {
                         sort,
                         brands,
                         categories,
-                        price_range
+                        price_range,
+                        search_text: search_text.length >= 3 ? search_text : ''
                     }
                 });
                 if(response.status == 200){

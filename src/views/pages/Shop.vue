@@ -1,6 +1,6 @@
 <script setup>
     import { useShop } from '@/stores';
-    import { onMounted, ref, computed } from 'vue';
+    import { onMounted, ref, computed, watch } from 'vue';
     import { storeToRefs } from 'pinia';
     import { productCard } from '@/components';
     import { ProductSkeleton, ShopSidebarSkeleton } from "@/components/skeleton";
@@ -20,7 +20,15 @@
 
     const getProducts = (page = 1) => {
         products.value = [],
-        shop.getProducts(page, show.value, sort.value, selectedBrands.value, selectedCategories.value, priceRangeSelect.value);
+        shop.getProducts(
+            page, 
+            show.value, 
+            sort.value, 
+            selectedBrands.value, 
+            selectedCategories.value, 
+            priceRangeSelect.value,
+            searchProducts.value,
+        );
     }
 
     const searchBrandText = ref('');
@@ -62,6 +70,14 @@
     //  Filter By Price Range Picker
 
     const priceRangeSelect = ref('');
+
+    // Product Search 
+    const searchProducts = ref('');
+    watch(() => [...searchProducts.value], (newText, oldText) => {
+        if(newText.length >= 3 || oldText.length >= 3){
+            getProducts();
+        }
+    })
 
 </script>
 <template>
@@ -156,6 +172,9 @@
                                             <option value="75">75</option>
                                             <option value="100">100</option>
                                         </select>
+                                    </div>
+                                    <div class="filter-short">
+                                       <input type="text" placeholder="Search Products..." v-model="searchProducts" @change="getProducts" class="form-control">
                                     </div>
                                     <div class="filter-short">
                                         <label class="filter-label">Short by :</label>
