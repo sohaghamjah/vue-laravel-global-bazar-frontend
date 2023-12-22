@@ -4,6 +4,7 @@ import { defineStore } from "pinia";
 export const useCategory = defineStore("category", {
     state: () => ({
         categories: {},
+        navCategories: [],
     }),
     actions:{
         async getCategories(){
@@ -17,6 +18,16 @@ export const useCategory = defineStore("category", {
                 }
             } catch (error) {
               console.log(error);
+            }
+        },
+        async getNavCategories(){
+            try {
+                let response = await axiosInstance.get("/nav-categories");
+                if(response.status == 200){
+                    this.navCategories = response.data;
+                }
+            } catch (error) {
+                console.log(error);
             }
         }
     },

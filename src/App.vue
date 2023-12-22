@@ -1,12 +1,34 @@
+<script setup>
+  import { onMounted } from 'vue';
+  import { useCategory } from '@/stores';
+  import { storeToRefs } from 'pinia';
+  import {
+      Header,
+      Navbar,
+      CartSidebar,
+      MobileSidebar,
+      NewsLetter,
+      Footer,
+      LoginModal
+    } 
+  from '@/components';
+
+  const category = useCategory();
+  const { navCategories } = storeToRefs(category);
+  onMounted(() => {
+    category.getNavCategories();
+  });
+</script>
+
 <template>
   <div>
     <div class="backdrop"></div>
     <a class="backtop fas fa-arrow-up" href="#"></a>
     
     <!-- Header Part -->
-    <Header />
+    <Header/>
     <!-- Navbar -->
-    <Navbar />
+    <Navbar :navCategories="navCategories"/>
     <!-- Cart Sidebar -->
     <CartSidebar />
 
@@ -30,19 +52,6 @@
     
   </div>
 </template>
-
-<script setup>
-  import {
-      Header,
-      Navbar,
-      CartSidebar,
-      MobileSidebar,
-      NewsLetter,
-      Footer,
-      LoginModal
-    } 
-  from '@/components';
-</script>
 
 
 <style>

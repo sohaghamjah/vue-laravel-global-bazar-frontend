@@ -5,17 +5,20 @@
     import { productCard } from '@/components';
     import { ProductSkeleton, ShopSidebarSkeleton } from "@/components/skeleton";
     import { Bootstrap5Pagination } from 'laravel-vue-pagination';
+    import { useRoute } from 'vue-router';
 
 
     const shop = useShop();
     const { products, sidebar_data } = storeToRefs(shop);
+    const route = useRoute();
 
     const show = ref(24);
     const sort = ref('default');
 
     onMounted(() => {
-        getProducts();
+        queryProducts();
         shop.shopSidebar();
+        getProducts();
     });
 
     const getProducts = (page = 1) => {
@@ -79,6 +82,18 @@
         }
     })
 
+    const queryProducts = () => {
+        selectedCategories.value = [];
+        if(route.query.products){
+            selectedCategories.value.push(route.query.products);
+        }
+    }
+
+    watch(() => route.query.products, (newVal, oldVal) => {
+        queryProducts();
+        getProducts();
+    });
+
 </script>
 <template>
   <div>
@@ -135,7 +150,7 @@
                                 <ul class="shop-widget-list shop-widget-scroll">
                                     <li v-for="category in searchCategoryData" :key="category.id">
                                         <div class="shop-widget-content">
-                                            <input type="checkbox" :id="`cate-${category.id}`" :value="category.id" v-model="selectedCategories" @change="getProducts" /><label :for="`cate-${category.id}`">{{ category.name }}</label>
+                                            <input type="checkbox" :id="`cate-${category.id}`" :value="category.slug" v-model="selectedCategories" @change="getProducts" /><label :for="`cate-${category.id}`">{{ category.name }}</label>
                                         </div>
                                         <span class="shop-widget-number">({{ category.products_count }})</span>
                                         </li>
@@ -196,6 +211,9 @@
                         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4">
                             <template v-if="products.data">
                                 <productCard :product="product" v-for="(product, index) in products.data" :key="index"/>
+                                <div style="margin: 0 auto;" v-show="products.data.length == 0">
+                                    <el-empty description="No Data Found"></el-empty>
+                                </div>
                             </template>
                             <template v-else>
                                 <ProductSkeleton :dataAmount="24" />
