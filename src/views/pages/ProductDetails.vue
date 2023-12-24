@@ -1,7 +1,7 @@
 <script setup>
     import { ref, onMounted } from "vue";
     import { useRoute } from 'vue-router';
-    import { useProduct, useCart, useNotification,userAuth,useWishlist } from '@/stores';
+    import { useProduct, useCart, useNotification, userAuth, useWishlist, useModal } from '@/stores';
     import { storeToRefs } from "pinia";
     import { ProductPrice } from '@/components';
 
@@ -40,13 +40,14 @@
 
     const auth     = userAuth();
     const wishlist = useWishlist();
+    const modal = useModal();
 
-     const addToWishlist = async (product) => {
+    const addToWishlist = async (product) => {
         if (auth.user.data) {
             let res = await wishlist.addToWishlist(product);
             notify.notificationElement('success', `${product.name} ${res.data.message}`);
         } else {
-            $("#login-modal").modal('show');
+            modal.toggleModal();
         }
     }
 

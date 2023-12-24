@@ -6,7 +6,8 @@
         useCart,
         useNotification,
         userAuth,
-        useWishlist
+        useWishlist,
+        useModal,
     } from "@/stores";
     import {
         ref
@@ -30,13 +31,15 @@
         notify.notificationElement('success', `${product.name} Added Successful`, "Success");
     }
 
+    const modal = useModal();
+
     // Wishlist
     const addToWishlist = async (product) => {
         if (auth.user.data) {
             let res = await wishlist.addToWishlist(product);
             notify.notificationElement('success', `${product.name} ${res.data.message}`);
         } else {
-            $("#login-modal").modal('show');
+           modal.toggleModal();
         }
     }
 </script>

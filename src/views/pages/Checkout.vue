@@ -1,5 +1,39 @@
+<script setup>
+    import { Modal } from '@/components';
+    import { useModal } from '@/stores';
+    const modal = useModal();
+
+    const couponForm = () => {
+        $(this).hide(), $(".coupon-form").css("display", "flex");
+    }
+</script>
 <template>
     <div>
+        <Modal>
+            <form class="modal-form">
+                <div class="form-title">
+                    <h3>add new address</h3>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Select Area</label><select class="form-select">
+                        <option value="">choose division</option>
+                    </select>
+                </div>
+                <div class="form-group" style="display: none">
+                    <label class="form-label">Select Division</label><select
+                        class="form-select">
+                        <option value="">choose district</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">address</label><textarea class="form-control"
+                        placeholder="Enter your address"></textarea>
+                </div>
+                <button class="form-btn" type="submit">
+                    save address info
+                </button>
+            </form>
+        </Modal>
         <section class="inner-section single-banner">
             <div class="container">
                 <h2>Checkout</h2>
@@ -22,7 +56,7 @@
                             <div class="account-card">
                                 <div class="account-title">
                                     <h4>delivery address</h4>
-                                    <button data-bs-toggle="modal" data-bs-target="#address-add">
+                                    <button @click.prevent="modal.toggleModal()">
                                         add address
                                     </button>
                                 </div>
@@ -38,38 +72,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal fade" id="address-add">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <button class="modal-close" data-bs-dismiss="modal">
-                                        <i class="icofont-close"></i>
-                                    </button>
-                                    <form class="modal-form">
-                                        <div class="form-title">
-                                            <h3>add new address</h3>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Select Area</label><select class="form-select">
-                                                <option value="">choose division</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group" style="display: none">
-                                            <label class="form-label">Select Division</label><select
-                                                class="form-select">
-                                                <option value="">choose district</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">address</label><textarea class="form-control"
-                                                placeholder="Enter your address"></textarea>
-                                        </div>
-                                        <button class="form-btn" type="submit">
-                                            save address info
-                                        </button>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -174,12 +176,6 @@
     </div>
 
 </template>
-
-<script setup>
-    const couponForm = () => {
-        $(this).hide(), $(".coupon-form").css("display", "flex");
-    }
-</script>
 
 <style>
     @import "@/assets/css/checkout.css";

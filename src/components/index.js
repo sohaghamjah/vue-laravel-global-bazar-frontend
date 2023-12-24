@@ -8,3 +8,4 @@ export { default as NewsLetter } from './NewsLetter.vue';
 export { default as productCard } from './product/productCard.vue';
 export { default as ProductPrice } from './product/ProductPrice.vue';
 export { default as LoginForm } from './LoginForm.vue';
+export { default as Modal } from './Modal.vue'

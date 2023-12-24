@@ -1,7 +1,8 @@
 <script setup>
     import {
         userAuth,
-        useNotification
+        useNotification,
+        useModal
     } from "@/stores";
     import {
         ref
@@ -26,6 +27,7 @@
     const router = useRouter();
     const route = useRoute();
     const notify = useNotification();
+    const modal = useModal();
 
 
     const onSubmit = async (values, {
@@ -36,7 +38,7 @@
             router.push({
                 name: route.path === '/user/login' ? 'home' : ''
             });
-            $("#login-modal").modal('hide');
+            modal.toggleModal();
             notify.notificationElement('success', 'Congrats, Your Are Logged Id!', 'Success');
         } else {
             setErrors(response);

@@ -1,4 +1,34 @@
+<script setup>
+  import { Modal } from '@/components';
+  import { useModal } from '@/stores';
+  const modal = useModal();
+</script>
+
 <template>
+
+  <Modal>
+    <form class="modal-form">
+      <div class="form-title"><h3>edit profile info</h3></div>
+      <div class="form-group">
+        <label class="form-label">profile image</label
+        ><input class="form-control" type="file" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">name</label
+        ><input class="form-control" type="text" value="Miron Mahmud" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">email</label
+        ><input
+          class="form-control"
+          type="text"
+          value="w3 Coders@gmail.com"
+        />
+      </div>
+      <button class="form-btn" type="submit">save profile info</button>
+    </form>
+  </Modal>
+
   <div>
     <section
     class="inner-section single-banner"
@@ -16,7 +46,7 @@
           <div class="account-card">
             <div class="account-title">
               <h4>Your Profile</h4>
-              <button data-bs-toggle="modal" data-bs-target="#profile-edit">
+              <button @click.prevent="modal.toggleModal()">
                 edit profile
               </button>
             </div>
@@ -299,11 +329,6 @@
   </div>
 </template>
   
-<script>
-export default {
-
-}
-</script>
 
 <style>
 
