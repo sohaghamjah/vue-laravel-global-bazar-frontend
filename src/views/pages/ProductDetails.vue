@@ -1,3 +1,57 @@
+<script setup>
+    import { ref, onMounted } from "vue";
+    import { useRoute } from 'vue-router';
+    import { useProduct, useCart, useNotification,userAuth,useWishlist } from '@/stores';
+    import { storeToRefs } from "pinia";
+    import { ProductPrice } from '@/components';
+
+    const product = useProduct();
+    const route = useRoute();
+    
+    const getSingleProducts = () => {
+        var slug = route.params.slug;
+        product.getSingleProducts(slug)
+    }
+    
+    const { singleProduct } = storeToRefs(product);
+
+    onMounted(() => {
+        getSingleProducts();
+    })
+
+    const thumbnail = ref('');
+
+    const active_image = ref(0);
+    const currentImageChange = (image, index) => {
+        active_image.value = index;
+        thumbnail.value = image;
+    }
+
+    // Add To Cart
+    const cart     = useCart();
+    const notify   = useNotification();
+
+    function addToCart(product) {
+        cart.addToCart(product)
+        notify.notificationElement('success', `${product.name} Added Successful`, "Success");
+    }
+
+     // Wishlist
+
+    const auth     = userAuth();
+    const wishlist = useWishlist();
+
+     const addToWishlist = async (product) => {
+        if (auth.user.data) {
+            let res = await wishlist.addToWishlist(product);
+            notify.notificationElement('success', `${product.name} ${res.data.message}`);
+        } else {
+            $("#login-modal").modal('show');
+        }
+    }
+
+</script>
+
 <template>
   <div>
       <section class="single-banner inner-section">
@@ -8,45 +62,44 @@
       </section>
       <section class="inner-section">
           <div class="container">
-              <div class="row">
+              <div class="row" v-if="singleProduct.data">
                   <div class="col-lg-6">
                       <div class="details-gallery">
-                          <div class="details-label-group">
-                              <label class="details-label new">new</label><label class="details-label off">-10%</label>
-                          </div>
-                          <ul class="details-preview">
-                              <li><img src="@/assets/images/product/01.jpg" alt="product" /></li>
-                              <li><img src="@/assets/images/product/01.jpg" alt="product" /></li>
-                              <li><img src="@/assets/images/product/01.jpg" alt="product" /></li>
-                              <li><img src="@/assets/images/product/01.jpg" alt="product" /></li>
-                              <li><img src="@/assets/images/product/01.jpg" alt="product" /></li>
-                          </ul>
-                          <ul class="details-thumb">
-                              <li><img src="@/assets/images/product/01.jpg" alt="product" /></li>
-                              <li><img src="@/assets/images/product/01.jpg" alt="product" /></li>
-                              <li><img src="@/assets/images/product/01.jpg" alt="product" /></li>
-                              <li><img src="@/assets/images/product/01.jpg" alt="product" /></li>
-                              <li><img src="@/assets/images/product/01.jpg" alt="product" /></li>
-                          </ul>
+                            <div class="details-label-group">
+                                <label class="details-label new">{{ singleProduct.data.conditions }}</label><label class="details-label off">{{ singleProduct.data.discount }}%</label>
+                            </div>
+                            <div class = "card-wrapper">
+                                <div class = "card">
+                                    <!-- card left -->
+                                    <div class = "product-imgs">
+                                    <div class = "img-display">
+                                        <div class = "img-showcase">
+                                            <img v-if="thumbnail == ''" :src="$filters.makeImagePath(singleProduct.data.thumbnail)">
+                                            <img v-else :src="thumbnail">
+                                        </div>
+                                    </div>
+                                    <div class = "img-select">
+                                        <div class="img-item" :class="[active_image == index ? 'active' : '']" v-for="(image, index) in singleProduct.data.images" :key="index">
+                                            <a href = "#" :data-id="image.id">
+                                                <img :src="$filters.makeImagePath(image)" @click.prevent="currentImageChange($filters.makeImagePath(image), index)" alt = "shoe image">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                       </div>
                   </div>
                   <div class="col-lg-6">
                       <div class="details-content">
-                          <h3 class="details-name"><a href="#">Girls Cloth</a></h3>
+                          <h3 class="details-name"><a href="#">{{ singleProduct.data.title }}</a></h3>
                           <div class="details-meta">
-                              <!--v-if-->
-                              <!--v-if-->
                           </div>
                           <div>
-                              <!-- //jodi modal ba single product page theke data ase.. tahole h3 design  -->
-                              <h3 class="view-price">
-                                  <del>৳2,050</del><span>৳1374</span>
-                              </h3>
+                              <productPrice :product="singleProduct.data" />
                           </div>
                           <p class="details-desc">
-                              Lorem ipsum dolor sit amet consectetur adipisicing elit facere
-                              harum natus amet soluta fuga consectetur alias veritatis
-                              quisquam ab eligendi itaque eos maiores quibusdam.
+                              {{ $filters.textShort(singleProduct.data.descp, 200) }}
                           </p>
 
                           <div class="details-list-group">
@@ -67,7 +120,7 @@
                               </ul>
                           </div>
                           <div class="details-add-group">
-                              <button class="product-add" title="Add to Cart">
+                              <button class="product-add" title="Add to Cart" @click.prevent="addToCart(singleProduct.data)">
                                   <i class="fas fa-shopping-basket"></i><span>add to cart</span>
                               </button>
                               <div class="product-action">
@@ -80,17 +133,18 @@
                               </div>
                           </div>
                           <div class="details-action-group">
-                              <a class="details-compare" href="compare.html" title="Compare This Item"><i
-                                      class="fas fa-random"></i><span>Buy Now</span></a><a class="details-wish wish"
-                                  href="#" title="Add Your Wishlist"><i class="icofont-heart"></i><span>add to
-                                      wish</span></a>
+                              <router-link class="details-compare" :to="{name: 'checkout'}" title="Compare This Item"><i
+                                      class="fas fa-random"></i><span>Buy Now</span></router-link>
+                                <a class="details-wish wish" style="cursor: pointer"
+                                @click.prevent="addToWishlist(singleProduct.data)" title="Add Your Wishlist"><i class="icofont-heart"></i><span>add to wishlist</span>
+                                </a>
                           </div>
                       </div>
                   </div>
               </div>
           </div>
       </section>
-      <section class="inner-section">
+      <section class="inner-section" v-if="singleProduct.data">
           <div class="container">
               <div class="row">
                   <div class="col-lg-12">
@@ -112,10 +166,7 @@
                       <div class="col-lg-12">
                           <div class="product-details-frame">
                               <div class="tab-descrip">
-                                  Omnis eum unde itaque doloribus officia sunt. Sunt
-                                  repellendus velit qui aperiam earum deleniti sed. Omnis esse
-                                  reprehenderit esse velit dolorem. Optio in impedit numquam
-                                  sed placeat dolorem.
+                                {{ singleProduct.data.descp }}
                               </div>
                           </div>
                       </div>
@@ -297,12 +348,43 @@
   </div>
 </template>
 
-<script>
-export default {
-
-}
-</script>
-
 <style>
     @import '@/assets/css/product-details.css';
+
+    img{
+        width: 100%;
+        display: block;
+    }
+    .img-display{
+        overflow: hidden;
+    }
+    .img-showcase{
+        display: flex;
+        width: 100%;
+        transition: all 0.5s ease;
+    }
+    .img-showcase img{
+        min-width: 100%;
+    }
+    .img-select{
+        display: flex;
+    }
+    .img-item{
+        margin: 0.3rem;
+    }
+    .img-item:nth-child(1),
+    .img-item:nth-child(2),
+    .img-item:nth-child(3){
+        margin-right: 0;
+    }
+    .img-item:hover{
+        opacity: 0.8;
+    }
+    .img-item.active{
+        opacity: 0.8;
+        border: 1px solid #1197;
+    }
+    .img-item{
+        border: 1px solid #ebebeb;
+    }
 </style>

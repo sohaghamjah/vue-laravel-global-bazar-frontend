@@ -23,6 +23,10 @@ app.config.globalProperties.$filters = {
 
     makeImagePath(img){
         return import.meta.env.VITE_API_URL + "/" + img;
+    },
+
+    textShort(text, size){
+        return text.substr(0, size) + '...';
     }
 }
 

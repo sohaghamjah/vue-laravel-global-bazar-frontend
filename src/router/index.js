@@ -35,7 +35,7 @@ const routes =[
         meta: {title: 'checkout'}
     },
     {
-        path: '/product/details', 
+        path: '/product/details/:slug', 
         name: 'product.details',
         component: ProductDetails,
         meta: {title: 'Product Details'}

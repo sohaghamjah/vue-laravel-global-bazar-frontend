@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { ref } from 'vue';
 
 export const useCart = defineStore("cart", {
   state: () => ({ 
@@ -26,7 +27,24 @@ export const useCart = defineStore("cart", {
   },
   actions: {
     addToCart(product) {
-      let item = product;
+      const price = ref();
+      
+      if (product.price) {
+          var discount = (product.discount * product.price) / 100;
+          var product_price = product.price - discount;
+          price.value = product_price.toFixed();
+      } else {
+          var product_price = product.price;
+          price.value = product_price.toFixed();
+      }
+
+      let item = {
+          id       : product.id,
+          name     : product.name,
+          price    : product.price,
+          thumbnail: product.thumbnail,
+      };
+
       item = {...item, quantity: 1};
 
       if(this.cartItems.length > 0){

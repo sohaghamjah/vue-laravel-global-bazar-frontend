@@ -9,6 +9,7 @@ export const useProduct = defineStore("product", {
         feature: {},
         newProducts: {},
         winter: {},
+        singleProduct: {},
     }),
     actions:{
         async getProducts(type = ''){
@@ -31,6 +32,16 @@ export const useProduct = defineStore("product", {
                     return new Promise((resolve) => {
                         resolve(response.data);
                     })
+                }
+            } catch (error) {
+              console.log(error);
+            }
+        },
+        async getSingleProducts(slug){
+            try {
+                let response = await axiosInstance.get(`/products/details/${slug}`);
+                if(response.status == 200){
+                    this.singleProduct = response.data;
                 }
             } catch (error) {
               console.log(error);

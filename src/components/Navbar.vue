@@ -1,7 +1,7 @@
 <script setup>
   const props = defineProps({
     navCategories:{
-      type: Array,
+      type: Object,
       required: true,
     }
   })

@@ -87,9 +87,13 @@
                             <div class="product-card">
                                 <ul>
                                     <li>
-                                        <a class="suggest-card" href="shop-4column.html">
+                                        <router-link class="suggest-card" :to="{
+                                            name: 'shop',
+                                            query: {products: category.slug}
+                                            }"
+                                        >
                                             <img :src="$filters.makeImagePath(category.image)" alt="" />
-                                        </a>
+                                        </router-link>
                                     </li>
                                 </ul>
                                 <h6 class="text-center mt-2">{{ category.name }}</h6>
@@ -257,14 +261,14 @@
                                                     </div>
                                                     <button class="product-wish wish">
                                                         <i class="fas fa-heart"></i></button>
-                                                        <router-link class="product-image" :to="{name: 'product.details'}">
+                                                        <router-link class="product-image" :to="{name: 'product.details', params: {slug: product.slug}}">
                                                             <img :src="$filters.makeImagePath(product.thumbnail)"
                                                             alt="product" />
                                                         </router-link>
                                                 </div>
                                                 <div class="product-content">
                                                     <h6 class="product-name">
-                                                        <a href="product-video.html">{{ product.name }}</a>
+                                                        <router-link :to="{name: 'product.details', params: {slug: product.slug}}">{{ product.name }}</router-link>
                                                     </h6>
                                                     <ProductPrice :product="product"/>
                                                     <button class="product-add" title="Add to Cart">

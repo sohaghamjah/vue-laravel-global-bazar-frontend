@@ -21,33 +21,16 @@
 
     const auth     = userAuth();
     const cart     = useCart();
-    const price    = ref();
     const notify   = useNotification();
     const wishlist = useWishlist();
 
     // Add To Cart
     function addToCart(product) {
-        if (product.price) {
-            var discount = (product.discount * product.price) / 100;
-            var product_price = product.price - discount;
-            price.value = product_price.toFixed();
-        } else {
-            var product_price = product.price;
-            price.value = product_price.toFixed();
-        }
-
-        cart.addToCart({
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            thumbnail: product.thumbnail,
-        });
-
+        cart.addToCart(product)
         notify.notificationElement('success', `${product.name} Added Successful`, "Success");
     }
 
     // Wishlist
-
     const addToWishlist = async (product) => {
         if (auth.user.data) {
             let res = await wishlist.addToWishlist(product);
@@ -68,13 +51,13 @@
                 <button class="product-wish wish" @click.prevent="addToWishlist(product)">
                     <i class="fa fa-spinner fa-spin delete_icon" v-if="wishlist.loading == product.id" aria-hidden="true"></i>
                     <i class="fas fa-heart" v-else></i></button>
-                <router-link class="product-image" :to="{ name: 'product.details' }">
+                <router-link class="product-image" :to="{ name: 'product.details', params: {slug: product.slug} }">
                     <img :src="$filters.makeImagePath(product.thumbnail)" alt="product" />
                 </router-link>
             </div>
             <div class="product-content">
                 <h6 class="product-name">
-                    <a href="product-video.html">{{ product . name }}</a>
+                    <router-link :to="{ name: 'product.details', params: {slug: product.slug} }">{{ product . name }}</router-link>
                 </h6>
                 <ProductPrice :product="product" />
                 <button class="product-add" title="Add to Cart" @click.prevent="addToCart(product)">
