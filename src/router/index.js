@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Nprogress from 'nprogress'; 
+import NProgress from 'nprogress'; 
 import { Login, Register } from '../views/auth';
 import { userAuth } from "@/stores";
 import { 
@@ -105,7 +105,7 @@ const DEFAULT_TITLE = '404';
 
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title || DEFAULT_TITLE;
-    Nprogress.start(); 
+    NProgress.start(); 
     const loggedIn = userAuth();
     if (to.matched.some((record) => record.meta.requiresAuth)) {
         if (!loggedIn.user.meta) {
@@ -125,6 +125,6 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(() => {
-    Nprogress.done();
+    NProgress.done();
 })
 export default router;

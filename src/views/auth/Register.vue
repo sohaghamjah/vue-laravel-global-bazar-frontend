@@ -2,12 +2,13 @@
     import { onMounted, ref } from "vue";
     import { Form, Field } from 'vee-validate';
     import * as yup from "yup";
-    import { userAuth, useNotification } from "@/stores";
+    import { userAuth, useNotification, useModal } from "@/stores";
     import { useRouter } from 'vue-router';
 
     // Password show hide
     const passwordShow = ref(true);
     const notify = useNotification();
+    const modal = useModal();
 
     const toggleShow = () => {
       passwordShow.value = !passwordShow.value;
@@ -30,14 +31,14 @@
         const res = await auth.register(values);
         if (res.data) {
             router.push({ name: 'home'});
-            notify.notificationElement('success', 'Register Successfylly', 'Success');
+            notify.notificationElement('success', 'Register Successfully', 'Success');
         } else {
             setErrors(res);
         }
     };
 
     onMounted(() => {
-        $('#login-modal').modal('hide');
+        modal.closeModal();
     })
 
 </script>

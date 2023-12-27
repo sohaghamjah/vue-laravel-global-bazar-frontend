@@ -4,6 +4,7 @@ import { ref } from 'vue';
 export const useCart = defineStore("cart", {
   state: () => ({ 
     cartItems: [],
+    isOpen: false,
   }),
   persist :{
     paths: ['cartItems'],
@@ -21,7 +22,6 @@ export const useCart = defineStore("cart", {
       state.cartItems.map((el) => {
         qty += el['quantity'];
       })
-
       return qty;
     }
   },
@@ -77,6 +77,10 @@ export const useCart = defineStore("cart", {
           this.cartItems[index]["quantity"] -= 1;
         }
       }
+    },
+
+    toggleCartSidebar(){
+      this.isOpen = !this.isOpen;
     }
   },
 });

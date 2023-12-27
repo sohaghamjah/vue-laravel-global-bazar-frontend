@@ -1,10 +1,13 @@
 <script setup>
-  const props = defineProps({
-    navCategories:{
-      type: Object,
-      required: true,
-    }
-  })
+    import { onMounted } from 'vue';
+    import { useCategory } from '@/stores';
+    import { storeToRefs } from 'pinia';
+
+    const category = useCategory();
+    const { navCategories } = storeToRefs(category);
+    onMounted(() => {
+        category.getNavCategories();
+    });
 </script>
 <template>
     <nav class="navbar-part">
@@ -21,7 +24,7 @@
                         <div class="megamenu">
                             <div class="container">
                               <div class="row row-cols-5">
-                                  <div class="col" v-for="(category, index) in navCategories.data" :key="index">
+                                  <div class="col" v-for="(category, index) in navCategories?.data" :key="index">
                                     <div class="megamenu-wrap">
                                       <router-link :to="{
                                           name: 'shop',

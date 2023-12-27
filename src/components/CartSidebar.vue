@@ -5,6 +5,11 @@ import { storeToRefs } from "pinia";
 const cart = useCart()
 const notify = useNotification();
 
+const closCartMenu = () => {
+    cart.toggleCartSidebar();
+}
+
+
 const { cartItems, cartItemsCount, cartTotal }  = storeToRefs(cart);
 
 const cartDelete = (index) => {
@@ -25,7 +30,7 @@ const couponForm = () => {
 </script>
 
 <template>
-    <aside class="cart-sidebar">
+    <aside class="cart-sidebar active" v-show="cart.isOpen">
         <div class="cart-header">
             <div class="cart-total" v-if="cartItemsCount !== 0">
                 <i class="fas fa-shopping-basket"></i><span>total item ({{ cartItemsCount }})</span>

@@ -33,14 +33,8 @@ const userLogout = async () => {
       });
   }
 
-  function cartShow(){
-    $("body").css("overflow", "hidden"),
-      $(".cart-sidebar").addClass("active"),
-      $(".cart-close").on("click", function () {
-        $("body").css("overflow", "inherit"),
-          $(".cart-sidebar").removeClass("active"),
-          $(".backdrop").fadeOut();
-      });
+  const cartShow = () => {
+    cart.toggleCartSidebar();
   }
 
 

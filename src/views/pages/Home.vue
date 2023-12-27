@@ -36,6 +36,7 @@
         product.getProducts('new');
     })
 
+
 </script>
 <template>
     <div>

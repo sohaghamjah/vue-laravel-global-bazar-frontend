@@ -1,22 +1,14 @@
 <script setup>
-    const cartMobile = () =>{
-        $("body").css("overflow", "hidden"),
-            $(".cart-sidebar").addClass("active"),
-            $(".cart-close").on("click", function () {
-                $("body").css("overflow", "inherit"),
-                $(".cart-sidebar").removeClass("active"),
-                $(".backdrop").fadeOut();
-            });
-    }
 
+    import { useCart } from '@/stores';
+
+    const cart = useCart();
+
+    const cartMobile = () =>{
+        cart.toggleCartSidebar();
+    }
     const cateMenu = () => {
-    $("body").css("overflow", "hidden"),
-        $(".category-sidebar").addClass("active"),
-        $(".category-close").on("click", function () {
-            $("body").css("overflow", "inherit"),
-            $(".category-sidebar").removeClass("active"),
-            $(".backdrop").fadeOut();
-        });
+        cart.toggleCartSidebar();
     }
 </script>
 <template>
