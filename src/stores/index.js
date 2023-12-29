@@ -8,3 +8,4 @@ export * from './wishlist';
 export * from './seller';
 export *  from  './shop';
 export * from './modal';
+export * from './address'

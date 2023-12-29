@@ -1,3 +1,22 @@
+<script setup>
+    import { Modal } from '@/components';
+    import { useModal, useAddress } from '@/stores';
+    import { onMounted, ref } from 'vue';
+
+    const modal = useModal();
+    const address = useAddress();
+
+    onMounted(() => {
+        address.getDivisions();
+    })
+
+    const divisionId = ref('');
+
+    const getDistrict = () => { 
+        address.getDistricts(divisionId.value)
+    }
+
+</script>
 <template>
     <div>
         <Modal>
@@ -6,14 +25,17 @@
                     <h3>add new address</h3>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Select Area</label><select class="form-select">
-                        <option value="">choose division</option>
+                    <label class="form-label">Select Area</label>
+                    <select class="form-select" @change="getDistrict" v-model="divisionId">
+                        <option disabled selected value="">Choose Division</option>
+                        <option v-for="(division, index) in address?.divisions" :key="index" :value="division.id">{{ division.name +' - '+ division.bn_name }}</option>
                     </select>
                 </div>
-                <div class="form-group" style="display: none">
-                    <label class="form-label">Select Division</label><select
-                        class="form-select">
-                        <option value="">choose district</option>
+                <div class="form-group">
+                    <label class="form-label">Select Area</label>
+                    <select class="form-select">
+                        <option disabled selected value="">Choose District</option>
+                        <option v-for="(district, index) in address?.districts" :key="index" :value="district.id">{{ district.name +' - '+ district.bn_name }}</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -51,12 +73,6 @@
         </div>
     </div>
 </template>
-
-<script setup>
-    import { Modal } from '@/components';
-    import { useModal } from '@/stores';
-    const modal = useModal();
-</script>
 
 <style>
 
