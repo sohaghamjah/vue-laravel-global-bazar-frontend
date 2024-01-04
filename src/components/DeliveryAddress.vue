@@ -1,51 +1,79 @@
 <script setup>
     import { Modal } from '@/components';
-    import { useModal, useAddress } from '@/stores';
-    import { onMounted, ref } from 'vue';
+    import { useModal, useAddress, useNotification } from '@/stores';
+    import { onMounted, reactive } from 'vue';
+    import { Form, Field } from 'vee-validate';
+    import * as yup from 'yup';
 
     const modal = useModal();
     const address = useAddress();
 
     onMounted(() => {
         address.getDivisions();
+        address.getUserAddress();
     })
 
-    const divisionId = ref('');
+    const form = reactive({
+        division_id: "",
+        district_id: "",
+        address    : "",
+    });
 
     const getDistrict = () => { 
-        address.getDistricts(divisionId.value)
+        address.getDistricts(form.division_id)
+    }
+
+    const notify = useNotification();
+
+    const schema = yup.object({
+        district_id: yup.string().required("The District field is required"),
+        division_id: yup.string().required("The division field is required"),
+        address    : yup.string().required("The address field is required"),
+    });
+
+    const onSubmit = async (values, {
+        setErrors
+    }) => {
+        const res = address.storeAddress(values);
+        if (res) {
+            address.getUserAddress();
+            modal.closeModal()
+            notify.notificationElement('success', 'Address Store Successful!', 'Success');
+        } else {
+            setErrors(response);
+        }
     }
 
 </script>
 <template>
-    <div>
+    <div> 
         <Modal>
-            <form class="modal-form">
+            <Form class="modal-form" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
                 <div class="form-title">
                     <h3>add new address</h3>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Select Area</label>
-                    <select class="form-select" @change="getDistrict" v-model="divisionId">
+                    <Field name="division_id" class="form-select" as="select" @change="getDistrict" v-model="form.division_id"  :class="{ 'is-invalid': errors.division_id }">
                         <option disabled selected value="">Choose Division</option>
                         <option v-for="(division, index) in address?.divisions" :key="index" :value="division.id">{{ division.name +' - '+ division.bn_name }}</option>
-                    </select>
+                    </Field>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Select Area</label>
-                    <select class="form-select">
+                    <Field class="form-select" name="district_id" as="select" :class="{ 'is-invalid' : errors.district_id }" v-model="form.district_id">
                         <option disabled selected value="">Choose District</option>
                         <option v-for="(district, index) in address?.districts" :key="index" :value="district.id">{{ district.name +' - '+ district.bn_name }}</option>
-                    </select>
+                    </Field>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">address</label><textarea class="form-control"
-                        placeholder="Enter your address"></textarea>
+                    <label class="form-label">address</label>
+                    <Field class="form-control" name="address" v-model="form.address" placeholder="Enter your address" :class="{ 'is-invalid' : errors.address }"></Field>
                 </div>
-                <button class="form-btn" type="submit">
-                    save address info
+                <button class="form-btn" type="submit" :disabled="isSubmitting">save address info 
+                    <span v-show="isSubmitting" class="spinner-border spinner-border-sm ms-1"></span>
                 </button>
-            </form>
+            </Form>
         </Modal>
 
         <div class="col-lg-12">
@@ -62,8 +90,7 @@
                             <div class="profile-card address active">
                                 <!-- <h6>Home</h6> -->
                                 <p>
-                                    <span>Dhaka</span>, <span>Gazipur</span>, Gazipur
-                                    ChowRasta.
+                                    <span>{{ address?.user_address?.division?.name }}</span>, <span>{{ address?.user_address?.district?.name }}</span>, {{ address?.user_address?.address }}
                                 </p>
                             </div>
                         </div>

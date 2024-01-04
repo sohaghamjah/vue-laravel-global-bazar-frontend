@@ -5,6 +5,7 @@ export const useAddress = defineStore("address", {
     state: () => ({
         divisions: [],
         districts: [],
+        user_address: {},
     }),
     actions:{
         async getDivisions(){
@@ -33,5 +34,34 @@ export const useAddress = defineStore("address", {
               console.log(error);
             }
         },
+        async storeAddress(form){
+            try {
+                let response = await axiosInstance.post('user/address/store', form);
+                if(response.status === 201){
+                    return new Promise((resolve) => {
+                        resolve(response);
+                    })
+                }
+            } catch (error) {
+                return new Promise((reject) => {
+                    reject(error.response.data.errors);
+                })
+            }
+        },
+        async getUserAddress(){
+            try {
+                let response = await axiosInstance.post('user/get/address');
+                if(response.status === 200){
+                    this.user_address = response.data.data;
+                    return new Promise((resolve) => {
+                        resolve(response);
+                    })
+                }
+            } catch (error) {
+                return new Promise((reject) => {
+                    reject(error.response.data.errors);
+                })
+            }
+        }
     },
 })

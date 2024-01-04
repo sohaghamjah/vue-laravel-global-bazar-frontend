@@ -32,7 +32,7 @@ const routes =[
         path: '/checkout', 
         name: 'checkout',
         component: Checkout,
-        meta: {title: 'checkout'}
+        meta: {title: 'checkout', requiresAuth: true}
     },
     {
         path: '/product/details/:slug', 
