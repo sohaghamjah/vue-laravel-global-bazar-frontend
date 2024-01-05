@@ -60,7 +60,7 @@ const couponForm = () => {
                                 <i class="icofont-minus"></i>
                             </button>
                             <input class="action-input"
-                                title="Quantity Number" type="text" name="quantity" :value="cart.quantity " />
+                                title="Quantity Number" type="text" name="quantity" :value="cart.quantity" />
                             <button class="action-plus" title="Quantity Plus" @click.prevent="cartIncrement(index)">
                                 <i class="icofont-plus"></i>
                             </button>

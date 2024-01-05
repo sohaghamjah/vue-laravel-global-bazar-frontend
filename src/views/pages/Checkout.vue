@@ -1,10 +1,20 @@
 <script setup>
     import { DeliveryAddress } from '@/components';
+    import { useCart, useAddress } from "@/stores";
+    import { storeToRefs } from "pinia";
+    import { useStatus } from '@/composable/status';
+
+    const cart = useCart();
+    const address = useAddress();
+    const status = useStatus();
+    const { coupon_status } = storeToRefs(status);
+    const { cartItems, cartTotal }  = storeToRefs(cart);
+    const { user_address }  = storeToRefs(address);
+
 </script>
 <template>
     <div>
-        
-        <section class="inner-section single-banner">
+        <section class="inner-section single-banner"> 
             <div class="container">
                 <h2>Checkout</h2>
             </div>
@@ -41,72 +51,37 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <tr v-for="(cart, index) in cartItems" :key="index">
                                                 <td class="table-image">
                                                     <div>
-                                                        <img src="http://127.0.0.1:8000/uploads/products/070120220216252JsAfaISYOqXxJ1L_450_450.jpg"
-                                                            alt="product" />
+                                                        <img :src="$filters.makeImagePath(cart.thumbnail)" alt="product" />
                                                     </div>
                                                 </td>
                                                 <td class="table-name">
-                                                    <h6>Iphone 12Pro Max</h6>
+                                                    <h6>{{ cart.name }}</h6>
                                                 </td>
                                                 <td class="table-price">
-                                                    <h6>৳96,000</h6>
+                                                    <h6>{{ $filters.currencySymbol(cart.price) }}</h6>
                                                 </td>
                                                 <td class="table-quantity">
-                                                    <h6>2</h6>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="table-image">
-                                                    <div>
-                                                        <img src="http://127.0.0.1:8000/uploads/seller/products/07012022004201xi5Arc2MTA5gae3O_450_450.jpg"
-                                                            alt="product" />
-                                                    </div>
-                                                </td>
-                                                <td class="table-name">
-                                                    <h6>Gaming Keyboard</h6>
-                                                </td>
-                                                <td class="table-price">
-                                                    <h6>৳1350</h6>
-                                                </td>
-                                                <td class="table-quantity">
-                                                    <h6>1</h6>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="table-image">
-                                                    <div>
-                                                        <img src="http://127.0.0.1:8000/uploads/products/062020221217066NMbHwDRZogbMpJf_450_450.png"
-                                                            alt="product" />
-                                                    </div>
-                                                </td>
-                                                <td class="table-name">
-                                                    <h6>Men Watch</h6>
-                                                </td>
-                                                <td class="table-price">
-                                                    <h6>৳595</h6>
-                                                </td>
-                                                <td class="table-quantity">
-                                                    <h6>1</h6>
+                                                    <h6>{{ cart.quantity }}</h6>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="chekout-coupon">
-                                    <button @click="couponForm" class="coupon-btn">Do you have a coupon code?</button>
-                                    <form class="coupon-form">
+                                    <button @click="status.toggleBtn" :class="{ 'd-none' : coupon_status }" class="coupon-btn">Do you have a coupon code?</button>
+                                    <form class="coupon-form" style="display: flex" v-show="coupon_status">
                                         <input type="text" placeholder="Enter your coupon code" /><button
                                             type="submit"><span>apply</span></button>
                                     </form>
                                 </div>
                                 <div class="checkout-charge">
                                     <ul>
-                                        <li><span>Sub total</span><span>৳193,945.00</span></li>
+                                        <li><span>Sub total</span><span>{{ $filters.currencySymbol(cartTotal) }}</span></li>
                                         <li><span>discount</span><span>৳0</span></li>
-                                        <li><span>delivery charge</span><span>৳60</span></li>
+                                        <li v-if="user_address.division"><span>delivery charge</span><span>{{ $filters.currencySymbol(user_address.division.charge) }}</span></li>
                                         <li>
                                             <span>Total<small>(Incl. VAT)</small></span><span>৳194,005.00</span>
                                         </li>
