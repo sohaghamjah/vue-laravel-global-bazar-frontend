@@ -1,15 +1,37 @@
 <script setup>
     import { DeliveryAddress } from '@/components';
-    import { useCart, useAddress } from "@/stores";
+    import { 
+        useCart, 
+        useAddress, 
+        useOrder,
+        useCoupon 
+    } from "@/stores";
     import { storeToRefs } from "pinia";
     import { useStatus } from '@/composable/status';
+    import { ref } from 'vue';
 
-    const cart = useCart();
+    const cart    = useCart();
     const address = useAddress();
-    const status = useStatus();
+    const status  = useStatus();
+    const order   = useOrder()
+    const coupon  = useCoupon();
+
     const { coupon_status } = storeToRefs(status);
     const { cartItems, cartTotal }  = storeToRefs(cart);
     const { user_address }  = storeToRefs(address);
+
+    // Coupon Management
+    
+    const coupon_code = ref("");
+    const applyCoupon = () => {
+        coupon.apply(coupon_code.value);
+    };  
+
+    // Place Order
+
+    const placeOrder = () => {
+        order.placeOrder();
+    }
 
 </script>
 <template>
@@ -72,18 +94,18 @@
                                 </div>
                                 <div class="chekout-coupon">
                                     <button @click="status.toggleBtn" :class="{ 'd-none' : coupon_status }" class="coupon-btn">Do you have a coupon code?</button>
-                                    <form class="coupon-form" style="display: flex" v-show="coupon_status">
-                                        <input type="text" placeholder="Enter your coupon code" /><button
+                                    <form class="coupon-form" style="display: flex" v-show="coupon_status" @submit.prevent="applyCoupon">
+                                        <input type="text" v-model="coupon_code" placeholder="Enter your coupon code" /><button
                                             type="submit"><span>apply</span></button>
                                     </form>
                                 </div>
                                 <div class="checkout-charge">
                                     <ul>
                                         <li><span>Sub total</span><span>{{ $filters.currencySymbol(cartTotal) }}</span></li>
-                                        <li><span>discount</span><span>৳0</span></li>
+                                        <li><span>discount</span><span>{{ $filters.currencySymbol(coupon.discount) }}</span></li>
                                         <li v-if="user_address.division"><span>delivery charge</span><span>{{ $filters.currencySymbol(user_address.division.charge) }}</span></li>
                                         <li>
-                                            <span>Total<small>(Incl. VAT)</small></span><span>৳194,005.00</span>
+                                            <span>Total<small>(Incl. VAT)</small></span><span>{{ $filters.currencySymbol(coupon.grandTotal) }}</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -91,7 +113,7 @@
                         </div>
                     </div>
                     <div class="checkout-proced">
-                        <button class="btn btn-inline"><span></span> Place Order</button>
+                        <button class="btn btn-inline" @click.prevent="placeOrder"><span></span> Place Order</button>
                     </div>
                 </div>
             </div>
