@@ -4,17 +4,21 @@
         useCart, 
         useAddress, 
         useOrder,
-        useCoupon 
+        useCoupon ,
+        useNotification
     } from "@/stores";
     import { storeToRefs } from "pinia";
     import { useStatus } from '@/composable/status';
     import { ref } from 'vue';
+    import { useRouter } from 'vue-router';
 
     const cart    = useCart();
     const address = useAddress();
     const status  = useStatus();
     const order   = useOrder()
     const coupon  = useCoupon();
+    const notify = useNotification();
+    const router = useRouter();
 
     const { coupon_status } = storeToRefs(status);
     const { cartItems, cartTotal }  = storeToRefs(cart);
@@ -28,9 +32,12 @@
     };  
 
     // Place Order
-
-    const placeOrder = () => {
-        order.placeOrder();
+    const placeOrder = async () => {
+        const res = await order.placeOrder();
+        if (res.data) {
+            router.push({ name: "home" });
+            notify.notificationElement('success', 'Order Place Successfully', "Success");
+        }
     }
 
 </script>

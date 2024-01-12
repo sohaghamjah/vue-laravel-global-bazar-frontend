@@ -9,7 +9,6 @@ export const useCoupon = defineStore("coupon", {
     getters: {
         discount: (state) => {
             const cart = useCart();
-            console.log(state);
             if (state.data.type === "fixed") {
                 return state.data.value;
             } else if (state.data.type === "percent") {
