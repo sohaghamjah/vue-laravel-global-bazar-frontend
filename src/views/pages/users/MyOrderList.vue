@@ -65,16 +65,16 @@
                     {{ $filters.currencySymbol(order.total) }}
                   </td>
                   <td class="table-shop">
-                    <!-- <RouterLink
+                    <RouterLink
                       :to="{
-                        name: 'order.details',
+                        name: 'my.order.details',
                         params: { id: order.id },
                       }"
                       class="product-add"
                       title="Add to Cart"
                     >
                       Details</RouterLink
-                    > -->
+                    >
                   </td>
                 </tr>
               </tbody>
@@ -93,12 +93,6 @@
      </section>
    </div>
 </template>
-
-<script>
-export default {
-
-}
-</script>
 
 <style>
 

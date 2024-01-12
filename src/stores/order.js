@@ -5,9 +5,15 @@ import { useRouter } from 'vue-router';
 
 export const useOrder = defineStore("order", {
     state: () => ({
-        orders: {},
+        orders: [],
+        order_details: {},
         loading: false,
     }),
+    getters: {
+        orderDetails: (state) => {
+            return state.order_details;
+        }
+    },
     actions:{
         async index(){
             this.loading = true;
@@ -15,6 +21,21 @@ export const useOrder = defineStore("order", {
                 let response = await axiosInstance.get("user/my/orders");
                 if(response.status == 200){
                     this.orders = response.data.data;
+                }
+            } catch (error) {
+                if (error.response) {
+                    return Promise.resolve(error.response.data.errors);
+                }
+            } finally {
+                this.loading = false;
+            }
+        },
+        async getOrderDetails(id){
+            this.loading = true;
+            try {
+                let response = await axiosInstance.get("user/my/order/details/"+id);
+                if(response.status == 200){
+                    this.order_details = response.data.data;
                 }
             } catch (error) {
                 if (error.response) {

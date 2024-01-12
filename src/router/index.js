@@ -13,6 +13,7 @@ import {
     MyProfile,
     ProductDetails,
     Checkout,
+    OrderDetails,
  } from '../views/pages'
 
 const routes =[
@@ -75,6 +76,12 @@ const routes =[
         name: 'user.orders',
         component: MyOrderList,
         meta: {title: 'My Orders', requiresAuth: true}
+    },
+    {
+        path: '/my/orders/details/:id',
+        name: 'my.order.details',
+        component: OrderDetails,
+        meta: {title: "Order Details", requiresAuth: true}
     },
     {
         path: '/my/wishlist', 
