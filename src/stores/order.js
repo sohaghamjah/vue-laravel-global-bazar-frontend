@@ -10,6 +10,7 @@ export const useOrder = defineStore("order", {
     }),
     actions:{
         async index(){
+            this.loading = true;
             try {
                 let response = await axiosInstance.get("user/my/orders");
                 if(response.status == 200){
@@ -19,6 +20,8 @@ export const useOrder = defineStore("order", {
                 if (error.response) {
                     return Promise.resolve(error.response.data.errors);
                 }
+            } finally {
+                this.loading = false;
             }
         },
         async placeOrder(){

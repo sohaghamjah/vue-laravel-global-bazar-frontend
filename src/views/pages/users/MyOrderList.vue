@@ -2,9 +2,9 @@
   import { useOrder } from '@/stores';
   import { onMounted } from 'vue';
   import { storeToRefs } from 'pinia';
+  import { Loader } from '@/components';
 
   const order = useOrder();
-  const orders = storeToRefs(order);
 
   onMounted(() => {
     order.index();
@@ -39,7 +39,14 @@
                   </tr>
               </thead>
               <tbody>
-                <tr v-for="(order, index) in order.orders" :key="index">
+                
+                <tr v-if="order.loading">
+                  <td colspan="7">
+                    <Loader />
+                  </td>
+                </tr>
+                
+                <tr v-else v-for="(order, index) in order.orders" :key="index">
                   <td class="table-serial">
                     <h6>{{ ++index }}</h6>
                   </td>
