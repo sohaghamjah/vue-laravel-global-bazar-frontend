@@ -8,20 +8,32 @@ export const useOrder = defineStore("order", {
         orders: [],
         order_details: {},
         loading: false,
+        page: 1,
+        noResult: false,
     }),
     getters: {
         orderDetails: (state) => {
             return state.order_details;
-        }
+        },
+        getOrders: (state) => {
+            return state.orders;
+        },
     },
     actions:{
         async index(){
             this.loading = true;
             try {
-                let response = await axiosInstance.get("user/my/orders");
+                let response = await axiosInstance.get("user/my/orders",  {
+                    params: { page: this.page },
+                });
                 if(response.status == 200){
-                    this.orders = response.data.data;
+                    if (response.data.data.length) {
+                        this.orders.push(...response.data.data);
+                    } else {
+                        this.noResult = true;
+                    }
                 }
+                this.page++;
             } catch (error) {
                 if (error.response) {
                     return Promise.resolve(error.response.data.errors);
