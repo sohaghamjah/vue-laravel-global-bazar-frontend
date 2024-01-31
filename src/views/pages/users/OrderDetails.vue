@@ -3,6 +3,7 @@
   import { onMounted } from 'vue';
   import { Loader } from '@/components';
   import { useRoute } from 'vue-router';
+  import { dateFormat } from '@/helpers/helper';
 import { storeToRefs } from 'pinia';
 
   const route = useRoute();
@@ -49,7 +50,7 @@ import { storeToRefs } from 'pinia';
                       <li>
                         <h6>Order Time</h6>
                         <p>
-                          {{ orderDetails.created_at }}
+                          {{ dateFormat(orderDetails.created_at) }}
                         </p>
                       </li>
                     </ul>
