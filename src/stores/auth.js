@@ -9,6 +9,11 @@ export const userAuth = defineStore("auth", {
     persist: {
         paths: ["user"],
     },
+    getters:{
+        getUser: (state) => {
+            return state.user.data;
+        },
+    },
     actions:{
         async login(formData){
             try {
