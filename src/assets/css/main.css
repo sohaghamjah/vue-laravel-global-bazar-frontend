@@ -5916,7 +5916,7 @@ tbody tr td:last-child {
 }
 .single-banner {
   background-size: cover !important;
-  padding: 100px 0px;
+  padding: 30px 0px;
   text-align: center;
   position: relative;
 }
@@ -5943,7 +5943,6 @@ tbody tr td:last-child {
 }
 .single-banner h2 {
   font-size: 38px;
-  margin-bottom: 15px;
   color: var(--white);
   text-transform: uppercase;
 }
