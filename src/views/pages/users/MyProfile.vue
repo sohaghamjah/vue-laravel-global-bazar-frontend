@@ -1,40 +1,97 @@
 <script setup>
-  import { Modal } from '@/components';
-  import { useModal, userAuth } from '@/stores';
+  import { LocalModal } from '@/components';
+  import { useModal, userAuth, useNotification } from '@/stores';
   import { DeliveryAddress } from '@/components';
   import { storeToRefs } from 'pinia';
+  import { reactive, ref } from 'vue';
+  import { Form, Field } from 'vee-validate';
+  import * as yup from 'yup';
 
   const modal = useModal();
   const auth = userAuth();
-
   const { getUser } = storeToRefs(auth);
+
+  const visible = ref(false);
+  const openEditModal = () => {
+    visible.value = true;
+  }
+
+  const closeEditModal = () => {
+    visible.value = false;
+  }
+
+  // Form Submit
+
+  const form = reactive({
+    name: auth.user?.data?.name,
+    email: auth.user?.data?.email,
+    phone: auth.user?.data?.phone,
+  })  
+
+  const schema = yup.object({
+      name : yup.string().required("The Name field is required"),
+      email: yup.string().required("The email field is required"),
+      phone: yup.string().required("The phone field is required"),
+  });
+
+  const notify = useNotification();
+
+  const onSubmit = async (values, {
+        setErrors
+    }) => {
+        const res = auth.updateProfile(values);
+        if (res) {
+            visible.value = false;
+            notify.notificationElement('success', 'Profile Updated Successful!', 'Success');
+        } else {
+            setErrors(response);
+        }
+    }
 
 </script>
 
 <template>
-
-  <Modal>
-    <form class="modal-form">
+  <LocalModal :visible="visible" @close="closeEditModal">
+    <Form class="modal-form" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
       <div class="form-title"><h3>edit profile info</h3></div>
       <div class="form-group">
-        <label class="form-label">profile image</label
-        ><input class="form-control" type="file" />
+        <label class="form-label">name</label>
+        <Field 
+          class="form-control" 
+          type="text"
+          name="name" 
+          v-model="form.name" 
+          :class="{'is-invalid' : errors.name}"
+          ></Field>
+          <span class="text-danger" v-if="errors.name">{{ errors.name }}</span>
       </div>
       <div class="form-group">
-        <label class="form-label">name</label
-        ><input class="form-control" type="text" value="Miron Mahmud" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">email</label
-        ><input
+        <label class="form-label">email</label>
+        <Field
           class="form-control"
           type="text"
-          value="w3 Coders@gmail.com"
-        />
+          name="email"
+          v-model="form.email"
+          :class="{ 'is-invalid' : errors.email }"
+        ></Field>
+        <span class="text-danger" v-if="errors.email">{{ errors.email }}</span>
       </div>
-      <button class="form-btn" type="submit">save profile info</button>
-    </form>
-  </Modal>
+      <div class="form-group">
+        <label class="form-label">Phone</label
+        ><Field
+          class="form-control"
+          type="text"
+          name="phone"
+          v-model="form.phone"
+          :class="{ 'is-invalid' : errors.phone }"
+        ></Field>
+        <span class="text-danger" v-if="errors.phone">{{ errors.phone }}</span>
+      </div>
+      <button :disabled="isSubmitting" class="form-btn" type="submit">Save profile info
+        <span v-show="isSubmitting" class="spinner-border spinner-border-sm ms-1"></span>
+      </button>
+    </Form>
+  </LocalModal>
 
   <div>
     <section
@@ -42,7 +99,6 @@
   >
     <div class="container">
       <h2>my profile</h2>
-      {{ getUser }}
     </div>
   </section>
 
@@ -53,7 +109,7 @@
           <div class="account-card">
             <div class="account-title">
               <h4>Your Profile</h4>
-              <button @click.prevent="modal.toggleModal()">
+              <button @click.prevent="openEditModal()">
                 edit profile
               </button>
             </div>
@@ -70,6 +126,7 @@
                     ><input
                       class="form-control"
                       type="text"
+                      readonly
                       :value="getUser.name"
                     />
                   </div>
@@ -80,6 +137,7 @@
                     ><input
                       class="form-control"
                       type="email"
+                      readonly
                       :value="getUser.email"
                     />
                   </div>

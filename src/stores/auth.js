@@ -31,7 +31,6 @@ export const userAuth = defineStore("auth", {
                 })
             }
         },
-
         async register(formData){
             try {
                 let response = await axiosInstance.post("/user/register", formData);
@@ -47,7 +46,22 @@ export const userAuth = defineStore("auth", {
                 })
             }
         },
-
+        async updateProfile(form){
+            try {
+                let response = await axiosInstance.post('user/profile/update', form);
+                console.log(response);
+                if(response.status === 200){
+                    this.user.data = response.data.data
+                    return new Promise((resolve) => {
+                        resolve(response);
+                    })
+                }
+            } catch (error) {
+                return new Promise((reject) => {
+                    reject(error.response.data.errors);
+                })
+            }
+        },
         async logout(){
             this.loading = true;
              try {

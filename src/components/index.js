@@ -11,3 +11,4 @@ export { default as LoginForm } from './LoginForm.vue';
 export { default as Modal } from './Modal.vue';
 export { default as DeliveryAddress } from './DeliveryAddress.vue';
 export { default as  Loader } from './loader/loading.vue';
+export { default as LocalModal } from './LocalModal.vue';
