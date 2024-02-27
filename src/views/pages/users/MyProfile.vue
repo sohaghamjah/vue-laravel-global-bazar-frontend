@@ -12,12 +12,21 @@
   const { getUser } = storeToRefs(auth);
 
   const visible = ref(false);
-  const openEditModal = () => {
-    visible.value = true;
+  const visiblePassword = ref(false);
+  const openModal = (data) => {
+    if(data == 'profile'){
+      visible.value = true;
+    }else{
+      visiblePassword.value = true;
+    }
   }
 
-  const closeEditModal = () => {
-    visible.value = false;
+  const closeEditModal = (data) => {
+    if(data == 'profile'){
+      visible.value = false;
+    }{
+      visiblePassword.value = false;
+    }
   }
 
   // Form Submit
@@ -39,19 +48,48 @@
   const onSubmit = async (values, {
         setErrors
     }) => {
-        const res = auth.updateProfile(values);
-        if (res) {
+        const res = await auth.updateProfile(values);
+        console.log(res);
+        if (res.data) {
             visible.value = false;
             notify.notificationElement('success', 'Profile Updated Successful!', 'Success');
         } else {
-            setErrors(response);
+          setErrors(res);
         }
+    }
+
+    // Password Form Submit
+    const passwordShow = ref(true);
+    const toggleShow = () => {
+      passwordShow.value = !passwordShow.value;
+    }
+
+    // Form validation
+    const password_schema = yup.object({
+      current_password: yup.string().required('This field is required').min(8),
+      password: yup.string().required().min(8),
+      password_confirmation: yup.string().required("This field is required").min(8).oneOf([yup.ref("password"), null], "password and confirm password must be match"),
+    });
+
+    const onPasswordSubmit = async (values, {
+        setErrors
+    }) => {
+      const res = await auth.updatePassword(values);
+      if (res.data){
+          visiblePassword.value = false;
+          notify.notificationElement('success', 'Password Updated Successful!', 'Success');
+      }else {
+          if(res.message){
+            notify.notificationElement('error', 'Invalid Current Password!', 'Error');
+          }
+          setErrors(res.errors);
+      }
     }
 
 </script>
 
 <template>
-  <LocalModal :visible="visible" @close="closeEditModal">
+  <LocalModal :visible="visible" @close="closeEditModal('profile')">
     <Form class="modal-form" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
       <div class="form-title"><h3>edit profile info</h3></div>
       <div class="form-group">
@@ -93,6 +131,37 @@
     </Form>
   </LocalModal>
 
+  <LocalModal :visible="visiblePassword" @close="closeEditModal('password')">
+    <Form class="modal-form" @submit="onPasswordSubmit" :validation-schema="password_schema" v-slot="{ errors, isSubmitting }">
+      <div class="form-title"><h3>update password</h3></div>
+
+      <div class="form-group">
+        <label class="form-label">Current Password</label>
+        <Field name="current_password" :type="passwordShow ? 'password' :  'text'" class="form-control" :class="{'is-invalid' : errors.password}" placeholder="password" />
+        <span class="view-password" @click="toggleShow"><i class="fas text-success" :class="passwordShow ? 'fa-eye' : 'fa-eye-slash'"></i></span>
+        <span class="text-danger" v-if="errors.current_password">{{ errors.current_password }}</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">New Password</label>
+        <Field name="password" :type="passwordShow ? 'password' :  'text'" class="form-control" :class="{'is-invalid' : errors.password}" placeholder="password" />
+        <span class="view-password" @click="toggleShow"><i class="fas text-success" :class="passwordShow ? 'fa-eye' : 'fa-eye-slash'"></i></span>
+        <span class="text-danger" v-if="errors.password">{{ errors.password }}</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Current Password</label>
+        <Field name="password_confirmation" :type="passwordShow ? 'password' :  'text'" class="form-control" :class="{'is-invalid' : errors.password}" placeholder="password" />
+        <span class="view-password" @click="toggleShow"><i class="fas text-success" :class="passwordShow ? 'fa-eye' : 'fa-eye-slash'"></i></span>
+        <span class="text-danger" v-if="errors.password_confirmation">{{ errors.password_confirmation }}</span>
+      </div>
+
+      <button :disabled="isSubmitting" class="form-btn" type="submit">update password
+        <span v-show="isSubmitting" class="spinner-border spinner-border-sm ms-1"></span>
+      </button>
+    </Form>
+  </LocalModal>
+
   <div>
     <section
     class="inner-section single-banner"
@@ -109,9 +178,14 @@
           <div class="account-card">
             <div class="account-title">
               <h4>Your Profile</h4>
-              <button @click.prevent="openEditModal()">
+             <div>
+              <button class="me-2" @click.prevent="openModal('profile')">
                 edit profile
               </button>
+              <button @click.prevent="openModal('password')">
+                update password
+              </button>
+             </div>
             </div>
             <div class="account-content">
               <div class="row">
@@ -140,11 +214,6 @@
                       readonly
                       :value="getUser.email"
                     />
-                  </div>
-                </div>
-                <div class="col-lg-2">
-                  <div class="profile-btn">
-                    <a href="change-password.html">change pass.</a>
                   </div>
                 </div>
               </div>

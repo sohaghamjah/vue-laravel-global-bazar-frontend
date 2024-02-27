@@ -62,6 +62,20 @@ export const userAuth = defineStore("auth", {
                 })
             }
         },
+        async updatePassword(form){
+            try {
+                let response = await axiosInstance.post('user/password/update', form);
+                if(response.status === 200){
+                    return new Promise((resolve) => {
+                        resolve(response);
+                    })
+                }
+            } catch (error) {
+                return new Promise((reject) => {
+                    reject(error.response.data);
+                })
+            }
+        },
         async logout(){
             this.loading = true;
              try {
@@ -80,6 +94,6 @@ export const userAuth = defineStore("auth", {
             }finally{
                 this.loading = false;
             }
-        }
+        },
     },
 })
