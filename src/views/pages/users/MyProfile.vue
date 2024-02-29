@@ -86,6 +86,20 @@
       }
     }
 
+    // Profile Image Update
+
+    const profilePictureUpdate = (event) => {
+
+      const imageFile = event.target.files[0];
+
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("image", imageFile);
+        auth.imageUpdate(formData);
+      }
+
+    }
+
 </script>
 
 <template>
@@ -191,7 +205,27 @@
               <div class="row">
                 <div class="col-lg-2">
                   <div class="profile-image">
-                    <a href="#"><img src="@/assets/images/user.png" alt="user" /></a>
+                    <!-- <a href="#"><img src="@/assets/images/user.png" alt="user" /></a> -->
+                    <div class="upload">
+                        <img
+                          v-if="auth.user?.data?.image"
+                          :src="$filters.makeImagePath(auth.user?.data?.image)"
+                          width="100"
+                          height="100"
+                          alt=""
+                        />
+                        <img
+                          v-else
+                          src="@/assets/images/user.png"
+                          width="100"
+                          height="100"
+                          alt=""
+                        />
+                        <div class="round">
+                          <input type="file" @change="profilePictureUpdate" class="profile-img"/>
+                          <i class="fa fa-camera" style="color: #fff"></i>
+                        </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
@@ -230,6 +264,38 @@
 </template>
   
 
-<style>
+<style scoped>
+.upload {
+  width: 100px;
+  position: relative;
+  margin: auto;
+}
 
+.upload img {
+  border-radius: 50%;
+  border: 6px solid #eaeaea;
+}
+
+.upload .round {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #119744;
+  width: 32px;
+  height: 32px;
+  line-height: 33px;
+  text-align: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile-img {
+  position: absolute;
+  transform: scale(2);
+  opacity: 0;
+}
+
+.profile-img::-webkit-file-upload-button {
+  cursor: pointer;
+}
 </style>

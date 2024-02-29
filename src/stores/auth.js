@@ -1,5 +1,6 @@
 import axiosInstance from "@/services/axiosService";
 import { defineStore } from "pinia";
+import { useNotification } from '@/stores';
 
 export const userAuth = defineStore("auth", {
     state: () => ({
@@ -19,7 +20,6 @@ export const userAuth = defineStore("auth", {
             try {
                 let response = await axiosInstance.post("/user/login", formData);
                 if(response.status == 200){
-                    console.log(response.data);
                     this.user = response.data;
                     return new Promise((resolve) => {
                         resolve(response.data);
@@ -62,6 +62,24 @@ export const userAuth = defineStore("auth", {
                 })
             }
         },
+
+        async imageUpdate(data) {
+            this.loading = true;
+            try {
+                const res = await axiosInstance.post("/user/image/update", data);
+                if (res.status === 200) {
+                    this.user.data = res.data.data;
+                    const notify = useNotification();
+                    notify.notificationElement('success', 'Profile Image Updated Successful!', 'Success');
+                }
+            } catch (error) {
+                if (error.response) {
+                }
+            } finally {
+                this.loading = false;
+            }
+        },
+    
         async updatePassword(form){
             try {
                 let response = await axiosInstance.post('user/password/update', form);
