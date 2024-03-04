@@ -23,6 +23,7 @@
     const { coupon_status } = storeToRefs(status);
     const { cartItems, cartTotal }  = storeToRefs(cart);
     const { user_address }  = storeToRefs(address);
+    const { loading } = storeToRefs(order);
 
     // Coupon Management
     
@@ -35,7 +36,7 @@
     const placeOrder = async () => {
         const res = await order.placeOrder();
         if (res.data) {
-            router.push({ name: "home" });
+            router.push({ name: "order.done", query: {order_type: true} });
             notify.notificationElement('success', 'Order Place Successfully', "Success");
         }
     }
@@ -120,7 +121,9 @@
                         </div>
                     </div>
                     <div class="checkout-proced">
-                        <button class="btn btn-inline" @click.prevent="placeOrder"><span></span> Place Order</button>
+                        <button class="btn btn-inline" @click.prevent="placeOrder">Place Order
+                            <span v-show="loading" class="spinner-border spinner-border-sm ms-1"></span>
+                        </button>
                     </div>
                 </div>
             </div>

@@ -14,6 +14,7 @@ import {
     ProductDetails,
     Checkout,
     OrderDetails,
+    OrderDone,
  } from '../views/pages'
 
 const routes =[
@@ -34,6 +35,12 @@ const routes =[
         name: 'checkout',
         component: Checkout,
         meta: {title: 'checkout', requiresAuth: true}
+    },
+    {
+        path: '/order-done', 
+        name: 'order.done',
+        component: OrderDone,
+        meta: {title: 'Order Done', requiresAuth: true}
     },
     {
         path: '/product/details/:slug', 

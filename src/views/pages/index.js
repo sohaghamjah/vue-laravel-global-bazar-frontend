@@ -9,3 +9,4 @@ export {default as MyOrderList} from './users/MyOrderList.vue';
 export {default as MyProfile} from './users/MyProfile.vue';
 export {default as MyWisList} from './users/MyWishlist.vue';
 export {default as OrderDetails} from './users/OrderDetails.vue';
+export {default as OrderDone} from "./OrderDone.vue";

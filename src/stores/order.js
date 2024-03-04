@@ -58,6 +58,7 @@ export const useOrder = defineStore("order", {
             }
         },
         async placeOrder(){
+            this.loading = true;
             const cart = useCart();
             const address = useAddress();
             const coupon = useCoupon();
@@ -78,6 +79,9 @@ export const useOrder = defineStore("order", {
                 if (error.response) {
                     return Promise.resolve(error.response.data.erros);
                 }
+            }
+            finally{
+                this.loading = false;
             }
         },
     },
