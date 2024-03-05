@@ -1,8 +1,21 @@
 <script setup>
+    import { useCart, userAuth } from '@/stores';
+    import { CategoryDropdown } from '@/components';
+    import { useCategory } from '@/stores';
+    import { storeToRefs } from 'pinia';
+    import { onMounted } from 'vue';
+    const auth = userAuth();
 
-    import { useCart } from '@/stores';
-
+    const { user } = storeToRefs(auth);
+    
+    const category = useCategory();
     const cart = useCart();
+
+    const { navCategories } = storeToRefs(category);
+    onMounted(() => {
+        category.getNavCategories();
+    });
+
 
     const cartMobile = () =>{
         cart.toggleCartSidebar();
@@ -10,6 +23,17 @@
     const cateMenu = () => {
         cart.toggleCartSidebar();
     }
+
+    const userLogout = async () => {
+        const res = await auth.logout();
+        if(res.status){
+            router.push({ name: 'home'});
+            notify.notificationElement('success', 'Logout Successfully!', 'Logout');
+        }
+    };
+
+    const { cartItemsCount } = storeToRefs(cart);
+
 </script>
 <template>
     <div>
@@ -21,113 +45,16 @@
                 <button class="category-close"><i class="icofont-close"></i></button>
             </div>
             <ul class="category-list">
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i
-                            class="flaticon-vegetable"></i><span>vegetables</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">asparagus</a></li>
-                        <li><a href="#">broccoli</a></li>
-                        <li><a href="#">carrot</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i
-                            class="flaticon-groceries"></i><span>groceries</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">Grains & Bread</a></li>
-                        <li><a href="#">Dairy & Eggs</a></li>
-                        <li><a href="#">Oil & Fat</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i
-                            class="flaticon-fruit"></i><span>fruits</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">Apple</a></li>
-                        <li><a href="#">Orange</a></li>
-                        <li><a href="#">Strawberry</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i class="flaticon-dairy-products"></i><span>dairy
-                            farm</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">Egg</a></li>
-                        <li><a href="#">milk</a></li>
-                        <li><a href="#">butter</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i class="flaticon-crab"></i><span>sea
-                            foods</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">Lobster</a></li>
-                        <li><a href="#">Octopus</a></li>
-                        <li><a href="#">Shrimp</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i class="flaticon-salad"></i><span>diet
-                            foods</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">Salmon</a></li>
-                        <li><a href="#">Potatoes</a></li>
-                        <li><a href="#">Greens</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i class="flaticon-dried-fruit"></i><span>dry
-                            foods</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">noodles</a></li>
-                        <li><a href="#">Powdered milk</a></li>
-                        <li><a href="#">nut & yeast</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i class="flaticon-fast-food"></i><span>fast
-                            foods</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">mango</a></li>
-                        <li><a href="#">plumsor</a></li>
-                        <li><a href="#">raisins</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i
-                            class="flaticon-cheers"></i><span>drinks</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">Wine</a></li>
-                        <li><a href="#">Juice</a></li>
-                        <li><a href="#">Water</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i
-                            class="flaticon-beverage"></i><span>coffee</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">Cappuchino</a></li>
-                        <li><a href="#">Espresso</a></li>
-                        <li><a href="#">Latte</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i
-                            class="flaticon-barbecue"></i><span>meats</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">Meatball</a></li>
-                        <li><a href="#">Sausage</a></li>
-                        <li><a href="#">Poultry</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a class="category-link dropdown-link" href="#"><i class="flaticon-fish"></i><span>fishes</span></a>
-                    <ul class="dropdown-list">
-                        <li><a href="#">Agujjim</a></li>
-                        <li><a href="#">saltfish</a></li>
-                        <li><a href="#">pazza</a></li>
-                    </ul>
-                </li>
+               <CategoryDropdown v-for="(category, index) in navCategories?.data" :key="index" :category="category.name">
+                    <li v-for="(sub_cat, sub_cat_index) in category.subcategories" :key="sub_cat_index">
+                        <router-link :to="{
+                            name: 'shop',
+                            query: {products: sub_cat.slug}
+                            }">
+                            {{ sub_cat.name }}
+                        </router-link>
+                    </li>=
+               </CategoryDropdown>
             </ul>
             <div class="category-footer">
                 <p>All Rights Reserved by <a href="#">W3Coders</a></p>
@@ -135,7 +62,7 @@
         </aside>
         <aside class="nav-sidebar">
             <div class="nav-header">
-                <a href="#"><img src="@/assets/images/logo.png" alt="logo" /></a><button class="nav-close"><i
+                <router-link :to="{name: 'home'}"><img src="@/assets/images/logo.png" alt="logo" /></router-link><button class="nav-close"><i
                         class="icofont-close"></i></button>
             </div>
             <div class="nav-content">
@@ -144,10 +71,10 @@
                         <a href="#" class="nav-link"><i class="icofont-home"></i>Home</a>
                     </li>
                     <li>
-                        <a class="nav-link" href="contact.html"><i class="icofont-contacts"></i>contact us</a>
+                        <router-link class="nav-link" :to="{name: 'shop'}"><i class="icofont-contacts"></i>shop</router-link>
                     </li>
                     <li>
-                        <a class="nav-link" href="login.html"><i class="icofont-logout"></i>logout</a>
+                        <a class="nav-link" @click="userLogout"><i class="icofont-logout"></i>logout</a>
                     </li>
                 </ul>
                 <div class="nav-info-group">
@@ -170,11 +97,10 @@
                 <i class="fas fa-list"></i><span>category</span>
             </button>
             <button class="cart-btn" @click="cartMobile" title="Cartlist">
-                <i class="fas fa-shopping-basket"></i><span>Cart</span><sup>2</sup>
+                <i class="fas fa-shopping-basket"></i><span>Cart</span><sup>{{ cartItemsCount }}</sup>
             </button>
-            <a href="/my-wishist" class="" title="Wishlist"><i
-                    class="fas fa-bell"></i><span>Notifications</span><sup>0</sup></a>
-            <a href="/user/profile" class="" title="My Account"><i class="fas fa-user"></i><span>My Account</span></a>
+            <router-link v-if="user.data" :to="{name: 'user.wishlist'}" class="header-widget" title="Wishlist"><i class="fas fa-heart"></i><sup>{{ user.meta.wishlists.length }}</sup></router-link>
+            <router-link :to="{name: 'user.login'}" class="" title="My Account"><i class="fas fa-user"></i><span>My Account</span></router-link>
         </div>
     </div>
 </template>
