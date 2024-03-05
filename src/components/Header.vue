@@ -2,6 +2,7 @@
 import { userAuth, useNotification, useCart } from "@/stores";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import { ref } from "vue";
 
 const cart = useCart();
 const router = useRouter();
@@ -35,6 +36,12 @@ const userLogout = async () => {
 
   const cartShow = () => {
     cart.toggleCartSidebar();
+  }
+
+
+  const searchData = ref('');
+  const handleSearch = () => {
+      router.push({name: "shop", query:{search: searchData.value} });
   }
 
 
@@ -78,8 +85,8 @@ const userLogout = async () => {
           <router-link :to="{name: 'home'}" class="header-logo">
             <img src="@/assets/images/logo.png" alt="logo" />
           </router-link>
-          <form class="header-form">
-            <input type="text" placeholder="Search anything..." /><button>
+          <form class="header-form" @submit.prevent="handleSearch">
+            <input type="text" v-model="searchData" placeholder="Search anything..." /><button>
               <i class="fas fa-search"></i>
             </button>
           </form>

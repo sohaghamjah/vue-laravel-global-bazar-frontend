@@ -82,12 +82,25 @@
         }
     })
 
+    // Header search
+    const queryHeaderSearch = () => {
+        searchProducts.value = "";
+        if(route.query.search){
+            searchProducts.value = route.query.search;
+        }
+    }
+
     const queryProducts = () => {
         selectedCategories.value = [];
         if(route.query.products){
             selectedCategories.value.push(route.query.products);
         }
     }
+
+    watch(() => route.query.search, (newVal, oldVal) => {
+        queryHeaderSearch();
+        getProducts();
+    });
 
     watch(() => route.query.products, (newVal, oldVal) => {
         queryProducts();
