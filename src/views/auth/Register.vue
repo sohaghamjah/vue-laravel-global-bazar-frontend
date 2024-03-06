@@ -43,7 +43,7 @@
 
 </script>
 <template>
-    <div>
+    <div> 
         <section class="user-form-part">
             <div class="container">
                 <div class="row justify-content-center">

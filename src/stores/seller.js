@@ -30,6 +30,24 @@ export const useSeller = defineStore("seller", {
             } catch (error) {
                 console.log(error);
             }
-        }
+        },
+
+
+        async register(formData) {
+            try {
+              const res = await axiosInstance.post("/seller/apply", formData);
+              if (res.status === 200) {
+                return new Promise((resolve) => {
+                  resolve(res.data);
+                });
+              }
+            } catch (error) {
+              if (error.response.data) {
+                return new Promise((reject) => {
+                  reject(error.response.data.errors);
+                });
+              }
+            }
+        },
     },
 })
